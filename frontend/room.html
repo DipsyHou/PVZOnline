@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PVZ Online - 房间准备</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2 id="room-title">房间 #ID</h2>
+        <div id="rename-container" style="display:none; margin-bottom: 10px;">
+            <input type="text" id="room-name-input" placeholder="新房间名">
+            <button onclick="renameRoom()">修改名称</button>
+        </div>
+        <div id="player-list">
+            <!-- 玩家列表 -->
+        </div>
+        
+        <div class="settings">
+            <label>模式: 
+                <select id="game-mode">
+                    <option value="pve">单人冒险 (PvE)</option>
+                    <option value="pvp">双人对战 (PvP)</option>
+                </select>
+            </label>
+            <br>
+            <label>关卡: 
+                <select id="game-level">
+                    <option value="1">Level 1</option>
+                    <option value="2">Level 2</option>
+                </select>
+            </label>
+            <br>
+            <label>帧率: 
+                <select id="game-tps">
+                    <option value="30">30 TPS (默认)</option>
+                    <option value="60">60 TPS (流畅)</option>
+                    <option value="120">120 TPS (极速)</option>
+                </select>
+            </label>
+        </div>
+
+        <button onclick="startGame()" id="start-btn" disabled>开始游戏</button>
+        <button onclick="leaveRoom()" style="background-color:#c0392b">离开房间</button>
+    </div>
+    <script src="js/room.js"></script>
+</body>
+</html>

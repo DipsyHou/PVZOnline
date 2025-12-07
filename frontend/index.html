@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PVZ Online - 登录</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="auth-page" class="container">
+        <h1>PVZ Online</h1>
+        <input type="text" id="username" placeholder="用户名">
+        <input type="password" id="password" placeholder="密码">
+        <button onclick="handleLogin()">登录</button>
+        <button onclick="handleRegister()" style="background-color:#e67e22">注册</button>
+        <p id="auth-msg" style="color: #e74c3c; font-size: 12px; margin-top: 10px;"></p>
+    </div>
+    <script src="js/auth.js"></script>
+</body>
+</html>

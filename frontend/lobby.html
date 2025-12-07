@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PVZ Online - 大厅</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>游戏大厅</h2>
+        <p id="welcome-msg"></p>
+        <div id="room-list" class="room-list">
+            <!-- 房间列表动态生成 -->
+            <p>正在加载房间...</p>
+        </div>
+        <button onclick="createRoom()">创建房间</button>
+        <button onclick="logout()" style="background-color:#c0392b; margin-top:10px">退出登录</button>
+    </div>
+    <script src="js/lobby.js"></script>
+</body>
+</html>

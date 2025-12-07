@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PVZ Online - 游戏</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body { justify-content: flex-start; padding-top: 20px; }
+    </style>
+</head>
+<body>
+    <div style="margin-bottom: 10px;">
+        <button onclick="backToLobby()" style="width:auto; padding: 5px 10px; font-size: 12px;">退出游戏</button>
+        <span id="game-info" style="color: white; margin-left: 10px;"></span>
+    </div>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script src="js/game.js"></script>
+</body>
+</html>
