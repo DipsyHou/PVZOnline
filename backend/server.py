@@ -14,7 +14,7 @@ import time
 import math
 
 # 导入游戏引擎
-from game_engine import RoomManager
+from room import RoomManager
 
 app = FastAPI()
 
@@ -22,7 +22,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True, # WebSocket 403 Fix: Cannot use wildcard with credentials=True
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -116,5 +116,5 @@ FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
 app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
 
 if __name__ == "__main__":
-    # 监听所有IP，端口8000
+    # 监听所有IP，端口80
     uvicorn.run(app, host="0.0.0.0", port=8000)
