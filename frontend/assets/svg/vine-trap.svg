@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Base: A tangled mass of vines -->
+  <circle cx="50" cy="50" r="40" fill="#2E8B57" opacity="0.6">
+    <animate attributeName="r" values="40;42;40" dur="1s" repeatCount="indefinite" />
+  </circle>
+  
+  <!-- Vines Group 1 -->
+  <g>
+      <path d="M20,80 Q50,20 80,80" stroke="#006400" stroke-width="5" fill="none" />
+      <path d="M10,50 Q50,90 90,50" stroke="#006400" stroke-width="5" fill="none" />
+      <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s" repeatCount="indefinite" />
+  </g>
+
+  <!-- Vines Group 2 (Counter-rotating) -->
+  <g>
+      <path d="M30,20 Q70,80 30,80" stroke="#228B22" stroke-width="4" fill="none" />
+      <path d="M70,20 Q30,80 70,80" stroke="#228B22" stroke-width="4" fill="none" />
+      <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="8s" repeatCount="indefinite" />
+  </g>
+  
+  <!-- Thorns -->
+  <g>
+    <path d="M30,40 L25,35 M70,60 L75,65 M50,30 L50,20" stroke="#8B4513" stroke-width="2" />
+    <animateTransform attributeName="transform" type="scale" values="1;1.1;1" dur="0.5s" repeatCount="indefinite" />
+  </g>
+
+  <!-- Animation: Pulsing effect to indicate active trap -->
+  <circle cx="50" cy="50" r="35" stroke="#32CD32" stroke-width="2" fill="none" opacity="0.5">
+    <animate attributeName="r" values="35;48;35" dur="1.5s" repeatCount="indefinite" />
+    <animate attributeName="opacity" values="0.8;0;0.8" dur="1.5s" repeatCount="indefinite" />
+    <animate attributeName="stroke-width" values="2;4;2" dur="1.5s" repeatCount="indefinite" />
+  </circle>
+</svg>

@@ -10,9 +10,19 @@ class Plant(GameObject):
         super().__init__(x, y, PLANT_W, PLANT_H, type_name)
         self.col = col
         self.row = row
-        self.last_action = time.time()
-        self.action_interval = 0
+        self.shoot_timer = 0
+        self.shoot_interval = 1.5 # seconds
         self.cost = 0
+        self.hp = 200
+        self.max_hp = 200
+        self.pumpkin = None # Attached pumpkin
 
-    def update(self, now, game_state):
+    def update(self, dt, game_state):
+        # Basic shoot timer logic
+        self.shoot_timer += dt
+        if self.shoot_timer >= self.shoot_interval:
+            self.shoot_timer = 0
+            self.shoot(game_state)
+
+    def shoot(self, game_state):
         pass

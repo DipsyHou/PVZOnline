@@ -1,0 +1,161 @@
+<svg width="256" height="256" viewBox="0 0 256 256"
+     xmlns="http://www.w3.org/2000/svg">
+
+  <!-- 背景留空，方便你自己控制 -->
+
+  <!-- 藤蔓和叶子 -->
+  <g id="stem-and-leaves">
+    <!-- 藤蔓 -->
+    <path d="M92 150
+             C 80 190, 90 220, 110 240"
+          fill="none"
+          stroke="#3c8b4b"
+          stroke-width="6"
+          stroke-linecap="round"/>
+
+    <!-- 叶子 1 -->
+    <path d="M84 170
+             C 70 168, 60 182, 66 196
+             C 74 210, 94 210, 102 196
+             C 108 184, 98 170, 84 170 Z"
+          fill="#4caf50"
+          stroke="#2f6b39"
+          stroke-width="3"/>
+
+    <!-- 叶子 2 （小一点） -->
+    <path d="M102 190
+             C 96 188, 90 196, 92 205
+             C 96 214, 108 214, 112 205
+             C 114 196, 108 188, 102 190 Z"
+          fill="#4caf50"
+          stroke="#2f6b39"
+          stroke-width="2.5"/>
+  </g>
+
+  <!-- 花萼和花颈 -->
+  <g id="calyx-and-neck">
+    <!-- 花萼 -->
+    <path d="M96 136
+             C 86 140, 82 148, 82 156
+             C 90 156, 98 154, 106 150
+             C 110 146, 110 140, 108 136 Z"
+          fill="#3c8b4b"
+          stroke="#2f6b39"
+          stroke-width="3"/>
+
+    <!-- 花颈（连接萼与喇叭） -->
+    <path d="M104 128
+             C 110 132, 122 136, 138 140
+             C 142 130, 142 122, 140 116
+             C 126 116, 114 120, 104 128 Z"
+          fill="#57a85a"
+          stroke="#2f6b39"
+          stroke-width="3"/>
+  </g>
+
+  <!-- 花冠（喇叭花主体，开口朝右） -->
+  <g id="flower">
+    <!-- 花冠外形 -->
+    <path d="M108 80
+             C 118 70, 138 64, 160 66
+             C 186 68, 206 84, 210 104
+             C 214 124, 204 144, 186 154
+             C 162 168, 134 166, 116 152
+             C 100 140, 92 120, 96 104
+             C 98 94, 102 86, 108 80 Z"
+          fill="url(#petalGradientOuter)"
+          stroke="#7b3ea5"
+          stroke-width="4"
+          stroke-linejoin="round"/>
+
+    <!-- 花冠内侧（右侧开口内部） -->
+    <path d="M144 82
+             C 162 80, 184 86, 196 98
+             C 208 110, 210 126, 204 136
+             C 198 146, 182 154, 166 154
+             C 148 154, 130 146, 122 136
+             C 114 126, 112 112, 118 100
+             C 124 90, 134 84, 144 82 Z"
+          fill="url(#petalGradientInner)"
+          opacity="0.95"/>
+
+    <!-- 花冠高光（左上，增强立体感） -->
+    <path d="M110 88
+             C 120 80, 136 76, 152 78
+             C 150 82, 146 88, 140 92
+             C 130 98, 118 102, 110 102
+             C 108 96, 108 92, 110 88 Z"
+          fill="white"
+          opacity="0.25"/>
+  </g>
+
+  <!-- 脸部（有眼睛没嘴巴，带一点女性化感觉） -->
+  <g id="face">
+    <!-- 左眼白 -->
+    <ellipse cx="132" cy="116" rx="9" ry="11"
+             fill="#ffffff" />
+    <!-- 左眼瞳孔 -->
+    <circle cx="134" cy="118" r="4.2"
+            fill="#2b2436" />
+    <!-- 左眼高光 -->
+    <circle cx="132.5" cy="115.5" r="1.6"
+            fill="#ffffff" />
+
+    <!-- 右眼白 -->
+    <ellipse cx="150" cy="118" rx="9" ry="11"
+             fill="#ffffff" />
+    <!-- 右眼瞳孔 -->
+    <circle cx="152" cy="120" r="4.2"
+            fill="#2b2436" />
+    <!-- 右眼高光 -->
+    <circle cx="150.5" cy="117.5" r="1.6"
+            fill="#ffffff" />
+
+    <!-- 轻微“腮红”，增加女性感 -->
+    <ellipse cx="126" cy="126" rx="6" ry="3.2"
+             fill="#ff8fb7"
+             opacity="0.38"/>
+    <ellipse cx="158" cy="128" rx="6" ry="3.2"
+             fill="#ff8fb7"
+             opacity="0.32"/>
+
+    <!-- 睫毛：左眼 -->
+    <path d="M126 107
+             L121 103
+             M129 105
+             L125 100"
+          stroke="#2b2436"
+          stroke-width="2"
+          stroke-linecap="round"/>
+
+    <!-- 睫毛：右眼 -->
+    <path d="M154 107
+             L159 103
+             M151 105
+             L155 100"
+          stroke="#2b2436"
+          stroke-width="2"
+          stroke-linecap="round"/>
+
+    <!-- 注意：不画嘴巴 -->
+  </g>
+
+  <!-- 渐变定义 -->
+  <defs>
+    <!-- 花冠外侧渐变：外圈偏紫，内圈偏粉 -->
+    <radialGradient id="petalGradientOuter"
+                    cx="30%" cy="35%" r="80%">
+      <stop offset="0%" stop-color="#fcd6ff"/>
+      <stop offset="40%" stop-color="#f6b4ff"/>
+      <stop offset="100%" stop-color="#b056d4"/>
+    </radialGradient>
+
+    <!-- 花冠内侧渐变：更亮的粉紫，模拟内部 -->
+    <radialGradient id="petalGradientInner"
+                    cx="40%" cy="40%" r="80%">
+      <stop offset="0%" stop-color="#ffeafd"/>
+      <stop offset="40%" stop-color="#f9c2ff"/>
+      <stop offset="100%" stop-color="#c473de"/>
+    </radialGradient>
+  </defs>
+</svg>

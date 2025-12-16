@@ -1,0 +1,207 @@
+<svg width="256" height="256" viewBox="0 0 256 256"
+     xmlns="http://www.w3.org/2000/svg">
+
+  <!-- 石榴主体（大果 + 裂开口） -->
+  <g id="pomegranate-body">
+    <!-- 主体轮廓：略扁的大石榴 -->
+    <path d="
+      M 58 210
+      C 42 188, 36 164, 38 142
+      C 40 116, 54 94, 78 80
+      C 98 68, 122 64, 146 66
+      C 172 68, 194 78, 210 94
+      C 228 112, 236 134, 236 156
+      C 236 180, 226 202, 206 220
+      C 184 240, 154 248, 124 246
+      C 96 244, 74 232, 58 210 Z"
+      fill="url(#bodyGradient)"
+      stroke="#5b0010"
+      stroke-width="4"
+      stroke-linejoin="round"/>
+
+    <!-- 顶部放大的石榴冠 -->
+    <path d="
+      M 96 82
+      C 96 66, 108 52, 122 44
+      L 134 66
+      L 150 40
+      L 164 68
+      L 184 46
+      C 194 56, 200 70, 198 84
+      C 182 84, 166 88, 152 94
+      C 138 88, 120 84, 96 82 Z"
+      fill="url(#crownGradient)"
+      stroke="#5b0010"
+      stroke-width="3"
+      stroke-linejoin="round"/>
+
+    <!-- 被炮管撑开的裂口（现在里面只看到暗红果肉，不画籽） -->
+    <path d="
+      M 112 98
+      C 120 96, 130 96, 138 98
+      C 150 102, 162 108, 172 118
+      C 178 124, 182 132, 184 140
+      C 176 142, 170 144, 164 150
+      C 156 158, 150 166, 146 176
+      C 134 172, 124 170, 112 170
+      C 108 158, 102 148, 94 140
+      C 88 134, 82 132, 76 130
+      C 80 118, 86 110, 96 104
+      C 102 100, 108 98, 112 98 Z"
+      fill="url(#innerFleshGradient)"
+      stroke="#5b0010"
+      stroke-width="3"
+      stroke-linejoin="round"/>
+  </g>
+
+  <!-- 炮管组：改成灰色“金属炮管” -->
+  <g id="pomegranate-tubes">
+    <!-- 左侧管 -->
+    <g transform="translate(112,78) rotate(-10)">
+      <rect x="-10" y="0" width="20" height="74"
+            rx="6" ry="6"
+            fill="url(#tubeGrayGradient)"
+            stroke="#444444"
+            stroke-width="3"/>
+      <!-- 顶部金属环 -->
+      <ellipse cx="0" cy="0" rx="10" ry="4"
+               fill="url(#tubeTopGrayGradient)"
+               stroke="#444444"
+               stroke-width="2"/>
+    </g>
+
+    <!-- 中间管（最高、最突出） -->
+    <g transform="translate(142,72) rotate(-2)">
+      <rect x="-10" y="0" width="20" height="84"
+            rx="6" ry="6"
+            fill="url(#tubeGrayGradient)"
+            stroke="#444444"
+            stroke-width="3"/>
+      <ellipse cx="0" cy="0" rx="10" ry="4"
+               fill="url(#tubeTopGrayGradient)"
+               stroke="#444444"
+               stroke-width="2"/>
+    </g>
+
+    <!-- 右侧管 -->
+    <g transform="translate(172,80) rotate(8)">
+      <rect x="-10" y="0" width="20" height="70"
+            rx="6" ry="6"
+            fill="url(#tubeGrayGradient)"
+            stroke="#444444"
+            stroke-width="3"/>
+      <ellipse cx="0" cy="0" rx="10" ry="4"
+               fill="url(#tubeTopGrayGradient)"
+               stroke="#444444"
+               stroke-width="2"/>
+    </g>
+  </g>
+
+  <!-- 五官（保持不变） -->
+  <g id="face">
+    <!-- 左眼白 -->
+    <ellipse cx="104" cy="176" rx="10" ry="12"
+             fill="#ffffff"/>
+    <!-- 左瞳孔 -->
+    <circle cx="106" cy="178" r="4.4"
+            fill="#1f1b27"/>
+    <!-- 左眼高光 -->
+    <circle cx="104.5" cy="175.5" r="1.6"
+            fill="#ffffff"/>
+
+    <!-- 右眼白 -->
+    <ellipse cx="140" cy="178" rx="10" ry="12"
+             fill="#ffffff"/>
+    <!-- 右瞳孔 -->
+    <circle cx="142" cy="180" r="4.4"
+            fill="#1f1b27"/>
+    <!-- 右眼高光 -->
+    <circle cx="140.5" cy="177.5" r="1.6"
+            fill="#ffffff"/>
+
+    <!-- 眉毛：微凶表情 -->
+    <path d="M94 166 L112 162"
+          stroke="#1f1b27"
+          stroke-width="3"
+          stroke-linecap="round"/>
+    <path d="M132 164 L152 168"
+          stroke="#1f1b27"
+          stroke-width="3"
+          stroke-linecap="round"/>
+
+    <!-- 嘴巴：坏笑弧线 -->
+    <path d="M108 194
+             C 118 204, 132 204, 146 194"
+          fill="none"
+          stroke="#1f1b27"
+          stroke-width="3"
+          stroke-linecap="round"/>
+
+    <!-- 嘴巴下方高光 -->
+    <path d="M114 198
+             C 124 206, 134 206, 142 200"
+          fill="none"
+          stroke="rgba(255,255,255,0.35)"
+          stroke-width="2"
+          stroke-linecap="round"/>
+  </g>
+
+  <!-- 体积高光和暗面 -->
+  <g id="body-highlights">
+    <!-- 左侧高光 -->
+    <path d="
+      M 70 166
+      C 68 150, 78 134, 96 126
+      C 104 122, 112 122, 118 124
+      C 112 132, 104 142, 94 150
+      C 84 156, 76 162, 70 166 Z"
+      fill="rgba(255,255,255,0.22)"/>
+
+    <!-- 右下暗面 -->
+    <path d="
+      M 176 214
+      C 192 202, 204 188, 210 174
+      C 212 184, 212 194, 208 202
+      C 204 210, 196 218, 188 222
+      C 182 224, 178 222, 176 214 Z"
+      fill="rgba(0,0,0,0.22)"/>
+  </g>
+
+  <!-- 渐变定义 -->
+  <defs>
+    <!-- 石榴主体渐变：亮红到深酒红 -->
+    <radialGradient id="bodyGradient" cx="35%" cy="28%" r="80%">
+      <stop offset="0%"  stop-color="#ff8a80"/>
+      <stop offset="45%" stop-color="#e53935"/>
+      <stop offset="100%" stop-color="#7b0014"/>
+    </radialGradient>
+
+    <!-- 石榴冠渐变 -->
+    <radialGradient id="crownGradient" cx="40%" cy="20%" r="80%">
+      <stop offset="0%"  stop-color="#ffb3b3"/>
+      <stop offset="40%" stop-color="#e53935"/>
+      <stop offset="100%" stop-color="#8b001b"/>
+    </radialGradient>
+
+    <!-- 裂口内部果肉渐变（无籽版本） -->
+    <radialGradient id="innerFleshGradient" cx="50%" cy="30%" r="80%">
+      <stop offset="0%"  stop-color="#f76b6b"/>
+      <stop offset="60%" stop-color="#b71c1c"/>
+      <stop offset="100%" stop-color="#7a0015"/>
+    </radialGradient>
+
+    <!-- 灰色炮管渐变 -->
+    <linearGradient id="tubeGrayGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#f0f0f0"/>
+      <stop offset="40%"  stop-color="#b0b0b0"/>
+      <stop offset="100%" stop-color="#666666"/>
+    </linearGradient>
+
+    <!-- 灰色炮管顶部渐变 -->
+    <radialGradient id="tubeTopGrayGradient" cx="50%" cy="30%" r="80%">
+      <stop offset="0%"  stop-color="#ffffff"/>
+      <stop offset="45%" stop-color="#d0d0d0"/>
+      <stop offset="100%" stop-color="#808080"/>
+    </radialGradient>
+  </defs>
+</svg>

@@ -5,10 +5,12 @@ class Sunflower(Plant):
         super().__init__(col, row, "sunflower")
         self.hp = 200
         self.max_hp = 200
-        self.action_interval = 16
+        self.shoot_interval = 16.0
         self.cost = 50
 
-    def update(self, now, game_state):
-        if now - self.last_action > self.action_interval:
-            game_state.sun += 25
-            self.last_action = now
+    def shoot(self, game_state):
+        # Add sun to game state
+        game_state.sun += 25
+        # In a real multiplayer game, we might want to spawn a sun object that needs to be clicked,
+        # but for now, auto-collect is fine or direct addition.
+        # The JS version added directly to `sun` variable.

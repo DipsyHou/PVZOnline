@@ -1,0 +1,37 @@
+<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Body -->
+  <rect x="30" y="35" width="20" height="30" fill="#5F9EA0" stroke="#2F4F4F" stroke-width="2"/>
+  
+  <!-- Head -->
+  <circle cx="40" cy="25" r="12" fill="#90EE90" stroke="#2F4F4F" stroke-width="2"/>
+  
+  <!-- Eyes -->
+  <circle cx="36" cy="22" r="3" fill="#FFF"/>
+  <circle cx="36" cy="22" r="1" fill="#000"/>
+  <circle cx="44" cy="22" r="3" fill="#FFF"/>
+  <circle cx="44" cy="22" r="1" fill="#000"/>
+  
+  <!-- Mouth -->
+  <path d="M36,30 Q40,33 44,30" stroke="#000" fill="none"/>
+  
+  <!-- Fisherman Hat -->
+  <path d="M25,18 L55,18 L50,10 L30,10 Z" fill="#F4A460" stroke="#8B4513" stroke-width="2"/>
+  <rect x="22" y="18" width="36" height="4" fill="#F4A460" stroke="#8B4513" stroke-width="1"/>
+  
+  <!-- Arms -->
+  <path d="M30,40 L20,50" stroke="#90EE90" stroke-width="4" stroke-linecap="round"/>
+  <path d="M50,40 L60,50" stroke="#90EE90" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Fishing Rod -->
+  <line x1="60" y1="50" x2="75" y2="10" stroke="#8B4513" stroke-width="3"/>
+  
+  <!-- Fishing Line -->
+  <path d="M75,10 Q70,40 65,60" stroke="#C0C0C0" stroke-width="1" fill="none"/>
+  
+  <!-- Hook -->
+  <path d="M65,60 C65,65 60,65 60,60" stroke="#C0C0C0" stroke-width="2" fill="none"/>
+  
+  <!-- Legs -->
+  <rect x="32" y="65" width="6" height="12" fill="#696969"/>
+  <rect x="42" y="65" width="6" height="12" fill="#696969"/>
+</svg>

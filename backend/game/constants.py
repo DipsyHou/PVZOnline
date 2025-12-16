@@ -12,7 +12,7 @@ PLANT_W = 80
 PLANT_H = 80
 
 # Zombies
-ZOMBIE_W = 50
+ZOMBIE_W = 75
 ZOMBIE_H = 100
 
 # Bullets

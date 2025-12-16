@@ -46,7 +46,7 @@ class Room:
             })
             # Send full state immediately
             if self.game:
-                await websocket.send_json(self.game.get_state(full_sync=True))
+                await websocket.send_json(self.game.get_state())
 
     def disconnect(self, username: str):
         if username in self.players:
@@ -128,7 +128,6 @@ class Room:
         print(f"Room {self.room_id} game started")
         tps = int(self.settings.get('tps', 30))
         sleep_time = 1.0 / tps
-        tick_count = 0
 
         empty_start_time = 0
         while self.running and self.state == "playing":
@@ -145,11 +144,8 @@ class Room:
             # Update Game State
             if self.game:
                 self.game.update()
-                # Full sync every 1 second (approx 30 ticks)
-                full_sync = (tick_count % 30 == 0)
-                state = self.game.get_state(full_sync=full_sync)
+                state = self.game.get_state()
                 await self.broadcast(state)
-                tick_count += 1
 
             await asyncio.sleep(sleep_time)
 

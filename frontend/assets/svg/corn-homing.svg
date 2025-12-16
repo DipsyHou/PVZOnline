@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <!-- Base leaves -->
+  <path d="M20,60 Q10,40 20,20 Q40,30 20,60" fill="#4CAF50" stroke="#2E7D32" stroke-width="2"/>
+  <path d="M60,60 Q70,40 60,20 Q40,30 60,60" fill="#4CAF50" stroke="#2E7D32" stroke-width="2"/>
+  
+  <!-- Corn Cob Body -->
+  <ellipse cx="40" cy="40" rx="15" ry="25" fill="#FFEB3B" stroke="#FBC02D" stroke-width="2"/>
+  
+  <!-- Kernels texture -->
+  <circle cx="35" cy="30" r="2" fill="#FBC02D"/>
+  <circle cx="45" cy="30" r="2" fill="#FBC02D"/>
+  <circle cx="35" cy="40" r="2" fill="#FBC02D"/>
+  <circle cx="45" cy="40" r="2" fill="#FBC02D"/>
+  <circle cx="35" cy="50" r="2" fill="#FBC02D"/>
+  <circle cx="45" cy="50" r="2" fill="#FBC02D"/>
+  
+  <!-- Eyes -->
+  <circle cx="35" cy="35" r="3" fill="black"/>
+  <circle cx="45" cy="35" r="3" fill="black"/>
+  
+  <!-- Mouth -->
+  <path d="M38,45 Q40,48 42,45" stroke="black" stroke-width="1" fill="none"/>
+  
+  <!-- Propeller/Leaves on top -->
+  <path d="M40,15 L30,5 L40,10 L50,5 Z" fill="#8BC34A" stroke="#558B2F" stroke-width="1">
+    <animateTransform attributeName="transform" type="rotate" from="0 40 15" to="360 40 15" dur="0.5s" repeatCount="indefinite"/>
+  </path>
+</svg>

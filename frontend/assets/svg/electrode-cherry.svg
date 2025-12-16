@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Simple electrode cherry icon: two cherries with sparks between -->
+  <g>
+    <circle cx="30" cy="60" r="12" fill="#ff2e2e" stroke="#b30000" stroke-width="2" />
+    <circle cx="70" cy="60" r="12" fill="#ff2e2e" stroke="#b30000" stroke-width="2" />
+    <path d="M30 48 Q50 30 70 48" stroke="#6affff" stroke-width="3" fill="none">
+      <animate attributeName="opacity" values="0.4;1;0.4" dur="1s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" attributeType="XML" type="scale" values="1;1.05;1" dur="1s" repeatCount="indefinite"/>
+    </path>
+    <!-- sparks -->
+    <g stroke="#6affff" stroke-width="2" opacity="0.9">
+      <path d="M48 42 L50 36 L52 42" />
+      <path d="M40 46 L36 44 L40 42" />
+      <path d="M60 46 L64 44 L60 42" />
+    </g>
+  </g>
+</svg>

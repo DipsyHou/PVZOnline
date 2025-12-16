@@ -1,0 +1,139 @@
+<svg width="256" height="256" viewBox="60 70 164 164"
+     xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Removed transform to crop background -->
+  <g>
+
+    <!-- 地面阴影 -->
+    <ellipse cx="132" cy="210" rx="56" ry="14"
+             fill="rgba(0,0,0,0.18)"/>
+
+    <!-- 树干（眼睛会长在这里） -->
+    <g id="trunk">
+      <rect x="116" y="170" width="32" height="44" rx="6"
+            fill="#8d5a3b"
+            stroke="#5a3723"
+            stroke-width="3"/>
+      <!-- 树干高光 -->
+      <path d="M118 174
+               C 124 172, 130 172, 136 174
+               C 134 178, 130 182, 124 184
+               C 120 184, 118 180, 118 174 Z"
+            fill="rgba(255,255,255,0.18)"/>
+    </g>
+
+    <!-- 树冠（三层松树状） -->
+    <g id="foliage">
+
+      <!-- 底层树冠 -->
+      <path d="
+        M 68 176
+        C 80 156, 96 140, 116 132
+        C 136 124, 156 124, 176 132
+        C 192 140, 208 156, 216 176
+        C 196 180, 176 184, 156 186
+        C 136 188, 116 188, 96 186
+        C 84 184, 76 180, 68 176 Z"
+        fill="url(#pineBottomGradient)"
+        stroke="#24513a"
+        stroke-width="4"
+        stroke-linejoin="round"/>
+
+      <!-- 中层树冠 -->
+      <path d="
+        M 82 144
+        C 94 128, 110 116, 128 112
+        C 146 108, 162 112, 176 120
+        C 188 128, 198 140, 204 152
+        C 190 156, 176 160, 160 162
+        C 142 164, 124 164, 108 162
+        C 96 160, 88 152, 82 144 Z"
+        fill="url(#pineMidGradient)"
+        stroke="#24513a"
+        stroke-width="4"
+        stroke-linejoin="round"/>
+
+      <!-- 顶层树冠：稍微更圆一点 -->
+      <path d="
+        M 100 126
+        C 110 106, 122 90, 134 82
+        C 142 78, 150 80, 158 86
+        C 166 94, 172 104, 178 118
+        C 168 120, 160 122, 150 124
+        C 140 126, 130 126, 120 124
+        C 110 122, 104 122, 100 126 Z"
+        fill="url(#pineTopGradient)"
+        stroke="#24513a"
+        stroke-width="4"
+        stroke-linejoin="round"/>
+    </g>
+
+    <!-- 五官：只有右眼，长在树干上，看向右侧，没有嘴巴 -->
+    <g id="face-on-trunk">
+      <!-- 右眼白（在树干右侧靠上位置） -->
+      <ellipse cx="136" cy="188" rx="7.5" ry="9"
+               fill="#ffffff"/>
+      <!-- 右瞳孔：更靠右，表示视线向右 -->
+      <circle cx="139" cy="189.5" r="3.6"
+              fill="#1f1b27"/>
+      <!-- 右眼高光 -->
+      <circle cx="137.8" cy="187.5" r="1.4"
+              fill="#ffffff"/>
+
+      <!-- 上眼睑/单眼轮廓，让只有一只眼也更有神 -->
+      <path d="M129 182
+               C 133 180, 139 180, 143 182"
+            fill="none"
+            stroke="#1f1b27"
+            stroke-width="2.4"
+            stroke-linecap="round"/>
+
+      <!-- 轻微“眼下阴影”，增加立体感 -->
+      <path d="M130 194
+               C 134 196, 138 196, 142 194"
+            fill="none"
+            stroke="rgba(0,0,0,0.25)"
+            stroke-width="1.6"
+            stroke-linecap="round"/>
+      <!-- 不画嘴巴 -->
+    </g>
+
+    <!-- 身上简单的“针叶”装饰，增加松树感 -->
+    <g id="needles-decoration" stroke-linecap="round">
+      <!-- 左侧 -->
+      <path d="M96 150 L86 144"
+            stroke="#2e8b57" stroke-width="3"/>
+      <path d="M102 160 L90 158"
+            stroke="#2e8b57" stroke-width="3"/>
+      <!-- 右侧 -->
+      <path d="M156 150 L168 144"
+            stroke="#2e8b57" stroke-width="3"/>
+      <path d="M150 160 L164 158"
+            stroke="#2e8b57" stroke-width="3"/>
+    </g>
+  </g>
+
+  <!-- 渐变定义（不缩放，原样即可） -->
+  <defs>
+    <!-- 底层树冠渐变：偏深绿 -->
+    <radialGradient id="pineBottomGradient" cx="40%" cy="20%" r="80%">
+      <stop offset="0%"  stop-color="#66bb6a"/>
+      <stop offset="45%" stop-color="#388e3c"/>
+      <stop offset="100%" stop-color="#1b5e20"/>
+    </radialGradient>
+
+    <!-- 中层树冠渐变：中等绿色 -->
+    <radialGradient id="pineMidGradient" cx="45%" cy="20%" r="80%">
+      <stop offset="0%"  stop-color="#81c784"/>
+      <stop offset="50%" stop-color="#43a047"/>
+      <stop offset="100%" stop-color="#2e7d32"/>
+    </radialGradient>
+
+    <!-- 顶层树冠渐变：稍亮一点 -->
+    <radialGradient id="pineTopGradient" cx="50%" cy="15%" r="80%">
+      <stop offset="0%"  stop-color="#a5d6a7"/>
+      <stop offset="45%" stop-color="#4caf50"/>
+      <stop offset="100%" stop-color="#2e7d32"/>
+    </radialGradient>
+  </defs>
+</svg>
