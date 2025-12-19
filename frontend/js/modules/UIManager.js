@@ -5,6 +5,8 @@ export class UIManager {
         this.callbacks = callbacks; // { onSelectPlant, onSelectZombie }
         this.sunContainer = document.getElementById('sun');
         this.plantSlotBar = document.getElementById('plant-slot-bar');
+        this.shovelContainer = document.getElementById('shovel-container');
+        this.shovelBtn = document.getElementById('shovel-btn');
         this.brainsContainer = document.getElementById('brains');
         this.zombieSlotBar = document.getElementById('zombie-slot-bar');
         this.sunCount = document.getElementById('sun-count');
@@ -12,6 +14,10 @@ export class UIManager {
         
         this.generatedPlantCards = false;
         this.generatedZombieCards = false;
+
+        if(this.shovelBtn) {
+            this.shovelBtn.onclick = () => this.callbacks.onSelectShovel();
+        }
     }
 
     update(gameState, myRole, selectedItem) {
@@ -19,6 +25,7 @@ export class UIManager {
 
         if (myRole === 'plant') {
             if(this.sunContainer) this.sunContainer.style.display = 'block';
+            if(this.shovelContainer) this.shovelContainer.style.display = 'block';
             if(this.plantSlotBar) {
                 this.plantSlotBar.style.display = 'flex';
                 if(!this.generatedPlantCards) this.generatePlantCards();
@@ -28,12 +35,26 @@ export class UIManager {
             
             if(this.sunCount) this.sunCount.textContent = sun;
             
+            // Highlight shovel if selected
+            if(selectedItem === 'shovel') {
+                 if(this.shovelBtn) {
+                     this.shovelBtn.style.outline = '2px solid yellow';
+                     this.shovelBtn.style.background = 'rgba(255,255,0,0.3)';
+                 }
+            } else {
+                 if(this.shovelBtn) {
+                     this.shovelBtn.style.outline = '';
+                     this.shovelBtn.style.background = '';
+                 }
+            }
+
             Object.keys(Config.PLANT_CONFIGS).forEach(type => {
                 this.updatePlantButton(type, Config.PLANT_CONFIGS[type].cost, sun, cooldowns, selectedItem);
             });
 
         } else if (myRole === 'zombie') {
             if(this.sunContainer) this.sunContainer.style.display = 'none';
+            if(this.shovelContainer) this.shovelContainer.style.display = 'none';
             if(this.plantSlotBar) this.plantSlotBar.style.display = 'none';
             if(this.brainsContainer) this.brainsContainer.style.display = 'block';
             if(this.zombieSlotBar) {
@@ -52,6 +73,26 @@ export class UIManager {
             if(this.brainsContainer) this.brainsContainer.style.display = 'none';
             if(this.zombieSlotBar) this.zombieSlotBar.style.display = 'none';
         }
+    }
+
+    handleEvents(events) {
+        events.forEach(e => {
+            if (e.type === 'wave_start') {
+                const msg = `Wave ${e.wave}`;
+                const roleDisplay = document.getElementById('role-display');
+                if(roleDisplay) {
+                    const originalText = roleDisplay.textContent;
+                    roleDisplay.textContent = msg;
+                    roleDisplay.style.color = 'red';
+                    roleDisplay.style.fontSize = '20px';
+                    setTimeout(() => {
+                        roleDisplay.textContent = originalText; 
+                        roleDisplay.style.color = '#333';
+                        roleDisplay.style.fontSize = '14px';
+                    }, 10000);
+                }
+            }
+        });
     }
 
     generatePlantCards() {

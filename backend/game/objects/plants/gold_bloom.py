@@ -12,5 +12,9 @@ class GoldBloom(Plant):
     def update(self, dt, game_state):
         self.life_timer += dt
         if self.life_timer >= 8.0:
-            game_state.sun += 500
+            if game_state.player_states:
+                for username in game_state.player_states:
+                    game_state.player_states[username]['sun'] += 500
+            else:
+                game_state.sun += 500
             self.active = False

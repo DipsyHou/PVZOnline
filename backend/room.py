@@ -84,15 +84,39 @@ class Room:
             await self.broadcast_room_state()
             return
 
+        if data['type'] == 'set_mode' and username == self.host:
+            mode = data.get('mode')
+            if mode in ['pve', 'endless']:
+                self.settings['mode'] = mode
+                await self.broadcast_room_state()
+            return
+
+        if data['type'] == 'update_settings' and username == self.host:
+            new_settings = data.get('settings', {})
+            # Validate mode
+            if 'mode' in new_settings and new_settings['mode'] not in ['pve', 'endless']:
+                return
+            self.settings.update(new_settings)
+            await self.broadcast_room_state()
+            return
+
         if self.state == "waiting":
             if data['type'] == 'start_game' and username == self.host:
                 self.state = "playing"
                 self.running = True
+                
                 # Assign roles
                 players_list = list(self.players.keys())
-                self.roles[players_list[0]] = "plant"
-                if len(players_list) > 1:
-                    self.roles[players_list[1]] = "zombie"
+                
+                if self.settings.get('mode') == 'endless':
+                    # Endless mode: everyone is plant
+                    for p in players_list:
+                        self.roles[p] = "plant"
+                else:
+                    # PvP mode
+                    self.roles[players_list[0]] = "plant"
+                    if len(players_list) > 1:
+                        self.roles[players_list[1]] = "zombie"
                 
                 await self.broadcast({
                     "type": "start_game",

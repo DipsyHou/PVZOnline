@@ -13,9 +13,19 @@ export class GameState {
 
     update(serverState, username) {
         this.myRole = serverState.roles[username];
-        this.sun = serverState.sun || 0;
+        
+        if (serverState.player_states && serverState.player_states[username]) {
+            // Use per-player state
+            const myState = serverState.player_states[username];
+            this.sun = myState.sun;
+            this.cooldowns = myState.cooldowns;
+        } else {
+            // Fallback to global state
+            this.sun = serverState.sun || 0;
+            this.cooldowns = serverState.cooldowns || {};
+        }
+        
         this.brains = serverState.brains || 0;
-        this.cooldowns = serverState.cooldowns || {};
         
         this.syncObjects('plants', serverState.plants);
         this.syncObjects('zombies', serverState.zombies);

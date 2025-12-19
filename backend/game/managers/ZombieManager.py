@@ -12,14 +12,14 @@ class ZombieManager:
     def __init__(self, entity_manager):
         self.em = entity_manager
         self.zombie_info = {
-            "normal": {"cost": 50, "cooldown": 5, "class": NormalZombie},
-            "buckethead": {"cost": 125, "cooldown": 10, "class": BucketheadZombie},
-            "exploder": {"cost": 150, "cooldown": 15, "class": ExploderZombie},
-            "fisher": {"cost": 175, "cooldown": 15, "class": FisherZombie},
-            "football": {"cost": 175, "cooldown": 15, "class": FootballZombie},
-            "football_forward": {"cost": 150, "cooldown": 15, "class": FootballForwardZombie},
-            "gargantuar": {"cost": 300, "cooldown": 30, "class": GargantuarZombie},
-            "priest": {"cost": 150, "cooldown": 15, "class": PriestZombie},
+            "normal": {"cost": 50, "cooldown": 1, "class": NormalZombie},
+            "buckethead": {"cost": 200, "cooldown": 1, "class": BucketheadZombie},
+            "exploder": {"cost": 150, "cooldown": 1, "class": ExploderZombie},
+            "fisher": {"cost": 200, "cooldown": 1, "class": FisherZombie},
+            "football": {"cost": 400, "cooldown": 1, "class": FootballZombie},
+            "football_forward": {"cost": 600, "cooldown": 1, "class": FootballForwardZombie},
+            "gargantuar": {"cost": 900, "cooldown": 1, "class": GargantuarZombie},
+            "priest": {"cost": 200, "cooldown": 1, "class": PriestZombie},
         }
 
     def handle_spawn_zombie(self, data):
@@ -40,6 +40,11 @@ class ZombieManager:
             self.em.zombies.append(info["class"](r))
             self.em.brains -= cost
             self.em.zombie_cooldowns[z_type] = now + cooldown
+
+    def spawn_zombie(self, row, z_type):
+        info = self.zombie_info.get(z_type)
+        if info:
+            self.em.zombies.append(info["class"](row))
 
     def update(self, now, dt):
         for z in self.em.zombies:

@@ -27,12 +27,18 @@ class Reshaper(Plant):
                 # We need to know the cost of the target. 
                 # Since we don't have a global config easily accessible here, 
                 # we rely on the plant instance having a 'cost' attribute.
-                if hasattr(target, 'cost'):
-                    game_state.sun += target.cost
+                refund_amount = getattr(target, 'cost', 0)
                 
-                # Reset cooldown
-                if target.type in game_state.plant_cooldowns:
-                    del game_state.plant_cooldowns[target.type]
+                if game_state.player_states:
+                    for username in game_state.player_states:
+                        game_state.player_states[username]['sun'] += refund_amount
+                        if target.type in game_state.player_states[username]['cooldowns']:
+                            del game_state.player_states[username]['cooldowns'][target.type]
+                else:
+                    game_state.sun += refund_amount
+                    # Reset cooldown
+                    if target.type in game_state.plant_cooldowns:
+                        del game_state.plant_cooldowns[target.type]
                 
                 # Remove target
                 target.active = False

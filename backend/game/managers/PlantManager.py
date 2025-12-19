@@ -60,7 +60,7 @@ class PlantManager:
             "maguey": {"cost": 300, "cooldown": 15, "class": Maguey},
         }
 
-    def handle_place_plant(self, data):
+    def handle_place_plant(self, data, username=None):
         c, r = data['col'], data['row']
         plant_type = data.get('plant_type', 'peashooter')
         
@@ -71,11 +71,20 @@ class PlantManager:
         cooldown = info["cooldown"]
         now = time.time()
 
+        # Determine resources based on user
+        if username and username in self.em.player_states:
+            p_state = self.em.player_states[username]
+            current_sun = p_state['sun']
+            cooldowns = p_state['cooldowns']
+        else:
+            current_sun = self.em.sun
+            cooldowns = self.em.plant_cooldowns
+
         # Check cooldown
-        if now < self.em.plant_cooldowns.get(plant_type, 0):
+        if now < cooldowns.get(plant_type, 0):
             return
 
-        if self.em.sun >= cost:
+        if current_sun >= cost:
             # Determine effective type for placement rules
             effective_type = plant_type
             if plant_type == "mimic":
@@ -105,14 +114,63 @@ class PlantManager:
 
             if can_place:
                 new_plant = info["class"](c, r)
+                new_plant.owner = username # Set owner
+                
                 if plant_type == "mimic":
                     new_plant.mimic_target = self.em.last_planted_type
                 else:
                     self.em.last_planted_type = plant_type
                     
                 self.em.plants.append(new_plant)
-                self.em.sun -= cost
-                self.em.plant_cooldowns[plant_type] = now + cooldown
+                
+                # Deduct resources
+                if username and username in self.em.player_states:
+                    self.em.player_states[username]['sun'] -= cost
+                    self.em.player_states[username]['cooldowns'][plant_type] = now + cooldown
+                else:
+                    self.em.sun -= cost
+                    self.em.plant_cooldowns[plant_type] = now + cooldown
+
+    def handle_shovel(self, data):
+        c, r = data['col'], data['row']
+        is_bottom = data.get('is_bottom', False)
+        
+        # Find plants at this location
+        plants_at_loc = [p for p in self.em.plants if p.col == c and p.row == r]
+        
+        if not plants_at_loc:
+            return
+
+        # Priority: 
+        # If is_bottom: Pumpkin -> Normal -> Floating
+        # If !is_bottom: Normal -> Pumpkin -> Floating
+        
+        pumpkin = next((p for p in plants_at_loc if p.type == "spiky_pumpkin"), None)
+        normal_plant = next((p for p in plants_at_loc if p.type not in ["spiky_pumpkin", "time_machine", "reshaper"]), None)
+        
+        if is_bottom:
+            if pumpkin:
+                pumpkin.hp = 0
+                pumpkin.active = False
+                return
+            if normal_plant:
+                normal_plant.hp = 0
+                normal_plant.active = False
+                return
+        else:
+            if normal_plant:
+                normal_plant.hp = 0
+                normal_plant.active = False
+                return
+            if pumpkin:
+                pumpkin.hp = 0
+                pumpkin.active = False
+                return
+
+        # If only floating plants left, remove the first one found
+        if plants_at_loc:
+            plants_at_loc[0].hp = 0
+            plants_at_loc[0].active = False
 
     def handle_activate_plant(self, data):
         c, r = data['col'], data['row']

@@ -41,6 +41,17 @@ export class Network {
         }
     }
 
+    sendShovel(col, row, isBottom) {
+        if(this.ws && this.ws.readyState === WebSocket.OPEN) {
+            this.ws.send(JSON.stringify({
+                type: 'shovel', 
+                col: col, 
+                row: row,
+                is_bottom: isBottom
+            }));
+        }
+    }
+
     sendSpawnZombie(row, zombieType) {
         if(this.ws && this.ws.readyState === WebSocket.OPEN) {
             this.ws.send(JSON.stringify({

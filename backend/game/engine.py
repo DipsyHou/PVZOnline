@@ -3,6 +3,7 @@ from game.managers.EntityManager import EntityManager
 from game.managers.PlantManager import PlantManager
 from game.managers.ZombieManager import ZombieManager
 from game.managers.BulletManager import BulletManager
+from game.managers.WaveManager import WaveManager
 
 class Game:
     def __init__(self, settings: dict, roles: dict):
@@ -13,16 +14,26 @@ class Game:
         self.zombie_manager = ZombieManager(self.em)
         self.bullet_manager = BulletManager(self.em)
         
+        self.mode = settings.get('mode', 'pve')
+        if self.mode == 'endless':
+            self.wave_manager = WaveManager(self.zombie_manager, self.em)
+        else:
+            self.wave_manager = None
+        
         # For compatibility with plants calling game.transform_plant
         self.em.transform_plant = self.plant_manager.transform_plant
+        
+        self.start_time = time.time()
 
     def handle_command(self, username: str, data: dict):
         role = self.em.roles.get(username)
         if role == "plant":
             if data['type'] == 'place_plant':
-                self.plant_manager.handle_place_plant(data)
+                self.plant_manager.handle_place_plant(data, username)
             elif data['type'] == 'activate_plant':
                 self.plant_manager.handle_activate_plant(data)
+            elif data['type'] == 'shovel':
+                self.plant_manager.handle_shovel(data)
         elif role == "zombie":
             if data['type'] == 'spawn_zombie':
                 self.zombie_manager.handle_spawn_zombie(data)
@@ -33,6 +44,15 @@ class Game:
         dt = now - (self.last_time if hasattr(self, 'last_time') else now)
         self.last_time = now
         
+        # Brain generation
+        elapsed_minutes = (now - self.start_time) / 60
+        if elapsed_minutes > 0:
+            brain_rate = 10 * elapsed_minutes * (1 + elapsed_minutes / 4)
+            self.em.brains += brain_rate * dt
+
+        if self.wave_manager:
+            self.wave_manager.update(dt)
+
         self.plant_manager.update(dt)
         self.zombie_manager.update(now, dt)
         self.bullet_manager.update(dt)
@@ -76,12 +96,28 @@ class Game:
             if hasattr(p, 'paired_id'): data['paired_id'] = p.paired_id
             plant_data.append(data)
 
+        zombie_data = []
+        for z in self.em.zombies:
+            z_data = {
+                "id": z.id, "x": r(z.x), "y": r(z.y), "type": z.type, 
+                "hp": int(z.hp), "max_hp": z.max_hp, 
+                "armor": getattr(z, 'armor', 0), "max_armor": getattr(z, 'max_armor', 0), 
+                "is_slowed": z.slow_timer > 0, "is_stunned": z.stun_timer > 0
+            }
+            if hasattr(z, 'smash_timer'): z_data['smash_timer'] = z.smash_timer
+            if hasattr(z, 'is_hooking'): z_data['is_hooking'] = z.is_hooking
+            if hasattr(z, 'hook_target_id'): z_data['hook_target_id'] = z.hook_target_id
+            if hasattr(z, 'hook_charge_time'): z_data['hook_charge_time'] = z.hook_charge_time
+            if hasattr(z, 'heal_target_id'): z_data['heal_target_id'] = z.heal_target_id
+            zombie_data.append(z_data)
+
         return {
             "type": "game_state",
             "sun": self.em.sun,
-            "brains": self.em.brains,
+            "brains": int(self.em.brains),
+            "player_states": self.em.get_processed_player_states(now),
             "plants": plant_data,
-            "zombies": [{"id": z.id, "x": r(z.x), "y": r(z.y), "type": z.type, "hp": int(z.hp), "max_hp": z.max_hp, "armor": getattr(z, 'armor', 0), "max_armor": getattr(z, 'max_armor', 0), "is_slowed": z.slow_timer > 0, "is_stunned": z.stun_timer > 0} for z in self.em.zombies],
+            "zombies": zombie_data,
             "bullets": [{"id": b.id, "x": int(b.x), "y": int(b.y), "w": b.w, "h": b.h, "type": b.type, "is_fire": getattr(b, 'is_fire', False), "angle": getattr(b, 'angle', 0)} for b in self.em.bullets],
             "roles": self.em.roles,
             "cooldowns": remaining_cooldowns,

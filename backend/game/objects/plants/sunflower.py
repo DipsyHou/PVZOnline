@@ -10,7 +10,11 @@ class Sunflower(Plant):
 
     def shoot(self, game_state):
         # Add sun to game state
-        game_state.sun += 25
+        if game_state.player_states:
+            for username in game_state.player_states:
+                game_state.player_states[username]['sun'] += 25
+        else:
+            game_state.sun += 25
         # In a real multiplayer game, we might want to spawn a sun object that needs to be clicked,
         # but for now, auto-collect is fine or direct addition.
         # The JS version added directly to `sun` variable.

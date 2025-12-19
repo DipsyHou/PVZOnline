@@ -47,7 +47,7 @@ class CornGatling(Plant):
             
             if random.random() < 0.1:
                 b = Bullet(bx, by, self.row, 400, 0, 40, "butter")
-                b.stun = 4.0
+                b.stun = 2.0
             else:
                 b = Bullet(bx, by, self.row, 400, 0, 20, "corn")
                 

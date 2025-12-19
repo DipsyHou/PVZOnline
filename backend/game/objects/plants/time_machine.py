@@ -22,6 +22,12 @@ class TimeMachine(Plant):
                     break
             
             if target:
-                # Reset cooldown
+                # Reset cooldown for ALL players
+                if game_state.player_states:
+                    for username in game_state.player_states:
+                        if target.type in game_state.player_states[username]['cooldowns']:
+                            del game_state.player_states[username]['cooldowns'][target.type]
+
+                # Reset cooldown (Global/Legacy)
                 if target.type in game_state.plant_cooldowns:
                     del game_state.plant_cooldowns[target.type]

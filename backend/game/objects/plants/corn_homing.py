@@ -32,7 +32,7 @@ class CornHoming(Plant):
             else:
                 kind = "butter"
                 damage = 40
-                stun = 4.0
+                stun = 2.0
             
             b = Bullet(bx, by, self.row, 360, 0, damage, kind)
             b.homing = True

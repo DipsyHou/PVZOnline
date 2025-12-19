@@ -30,6 +30,10 @@ class Game {
             onSelectZombie: (type) => {
                 this.inputHandler.selectZombie(type);
                 this.uiManager.update(this.gameState, this.gameState.myRole, type);
+            },
+            onSelectShovel: () => {
+                this.inputHandler.selectShovel();
+                this.uiManager.update(this.gameState, this.gameState.myRole, this.inputHandler.getSelectedItem());
             }
         });
 
@@ -60,38 +64,8 @@ class Game {
 
     handleEvents(events) {
         if(!events) return;
-        events.forEach(e => {
-            if(e.kind === 'watermelon_splash'){
-                this.particleSystem.spawn(e.x, e.y, '#2e8b57', 15, {style: 'splash'});
-            } else if(e.kind === 'bomb_splash'){
-                this.particleSystem.spawn(e.x, e.y, '#c0392b', 15, {style: 'splash'});
-            } else if(e.kind === 'jalapeno_explosion'){
-                const c = Math.floor(e.x / Config.CELL_W);
-                const r = Math.floor(e.y / Config.CELL_H);
-
-                // Row fire
-                for(let i=0; i<Config.COLS; i++){
-                    const tx = i * Config.CELL_W + Config.CELL_W/2;
-                    const ty = r * Config.CELL_H + Config.CELL_H/2;
-                    this.particleSystem.spawn(tx, ty, '#ff4500', 15, {style: 'fire'});
-                    this.particleSystem.spawn(tx, ty, '#ffcc00', 5, {style: 'fire'});
-                }
-
-                // Column fire
-                for(let i=0; i<Config.ROWS; i++){
-                    if(i === r) continue; 
-                    const tx = c * Config.CELL_W + Config.CELL_W/2;
-                    const ty = i * Config.CELL_H + Config.CELL_H/2;
-                    this.particleSystem.spawn(tx, ty, '#ff4500', 15, {style: 'fire'});
-                    this.particleSystem.spawn(tx, ty, '#ffcc00', 5, {style: 'fire'});
-                }
-            } else if(e.kind === 'ice_explosion'){
-                this.particleSystem.spawn(e.x, e.y, '#aee7ff', 26, {style: 'spark'});
-                this.particleSystem.spawn(e.x, e.y, '#4da3ff', 10, {style: 'smoke'});
-            } else if(e.kind === 'mimic_transform'){
-                this.particleSystem.spawn(e.x, e.y, '#999999', 15, {style: 'spark'});
-            }
-        });
+        this.uiManager.handleEvents(events);
+        this.renderer.handleEvents(events, this.particleSystem);
     }
 
     loop() {
@@ -114,7 +88,13 @@ class Game {
             }
         });
 
-        this.renderer.draw(this.gameState, this.particleSystem);
+        const inputState = {
+            hoverCol: this.inputHandler.hoverCol,
+            hoverRow: this.inputHandler.hoverRow,
+            isShovelSelected: this.inputHandler.isShovelSelected,
+            isBottom: this.inputHandler.isBottom
+        };
+        this.renderer.draw(this.gameState, this.particleSystem, inputState);
         requestAnimationFrame(this.loop);
     }
 }

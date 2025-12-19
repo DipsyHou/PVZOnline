@@ -29,14 +29,14 @@ export const PLANT_CONFIGS = {
 };
 
 export const ZOMBIE_CONFIGS = {
-    normal: { name: '普通', cost: 50, cooldown: 5, img: 'assets/png/zombie.png' },
-    buckethead: { name: '铁桶', cost: 125, cooldown: 10, img: 'assets/png/bucket-zombie.png' },
-    exploder: { name: '爆破', cost: 150, cooldown: 15, img: 'assets/svg/exploder-zombie.svg' },
-    fisher: { name: '渔夫', cost: 175, cooldown: 15, img: 'assets/svg/fisher-zombie.svg' },
-    football: { name: '橄榄球', cost: 175, cooldown: 15, img: 'assets/png/rugby-zombie.png' },
-    football_forward: { name: '前锋', cost: 150, cooldown: 15, img: 'assets/png/football-forward.png' },
-    gargantuar: { name: '巨人', cost: 300, cooldown: 30, img: 'assets/png/gargantuar.png' },
-    priest: { name: '牧师', cost: 150, cooldown: 15, img: 'assets/svg/priest-zombie.svg' },
+    normal: { name: '普通', cost: 50, cooldown: 1, img: 'assets/png/zombie.png' },
+    buckethead: { name: '铁桶', cost: 200, cooldown: 1, img: 'assets/png/bucket-zombie.png' },
+    exploder: { name: '爆破', cost: 150, cooldown: 1, img: 'assets/svg/exploder-zombie.svg' },
+    fisher: { name: '渔夫', cost: 200, cooldown: 1, img: 'assets/svg/fisher-zombie.svg' },
+    football: { name: '橄榄球', cost: 400, cooldown: 1, img: 'assets/png/rugby-zombie.png' },
+    football_forward: { name: '前锋', cost: 600, cooldown: 1, img: 'assets/png/football-forward.png' },
+    gargantuar: { name: '巨人', cost: 900, cooldown: 1, img: 'assets/png/gargantuar.png' },
+    priest: { name: '牧师', cost: 200, cooldown: 1, img: 'assets/svg/priest-zombie.svg' },
 };
 
 export const Config = {

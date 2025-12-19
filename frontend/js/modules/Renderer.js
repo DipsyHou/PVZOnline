@@ -12,7 +12,52 @@ export class Renderer {
         this.canvas.height = Config.SCREEN_HEIGHT;
     }
 
-    draw(gameState, particleSystem) {
+    handleEvents(events, particleSystem) {
+        events.forEach(e => {
+            if(e.kind === 'watermelon_splash'){
+                particleSystem.spawn(e.x, e.y, '#2e8b57', 15, {style: 'splash'});
+            } else if(e.kind === 'bomb_splash'){
+                particleSystem.spawn(e.x, e.y, '#c0392b', 15, {style: 'splash'});
+            } else if(e.kind === 'jalapeno_explosion'){
+                const c = Math.floor(e.x / Config.CELL_W);
+                const r = Math.floor(e.y / Config.CELL_H);
+
+                // Row fire
+                for(let i=0; i<Config.COLS; i++){
+                    const tx = i * Config.CELL_W + Config.CELL_W/2;
+                    const ty = r * Config.CELL_H + Config.CELL_H/2;
+                    particleSystem.spawn(tx, ty, '#ff4500', 15, {style: 'fire'});
+                    particleSystem.spawn(tx, ty, '#ffcc00', 5, {style: 'fire'});
+                }
+
+                // Column fire
+                for(let i=0; i<Config.ROWS; i++){
+                    if(i === r) continue; 
+                    const tx = c * Config.CELL_W + Config.CELL_W/2;
+                    const ty = i * Config.CELL_H + Config.CELL_H/2;
+                    particleSystem.spawn(tx, ty, '#ff4500', 15, {style: 'fire'});
+                    particleSystem.spawn(tx, ty, '#ffcc00', 5, {style: 'fire'});
+                }
+            } else if(e.kind === 'ice_explosion'){
+                particleSystem.spawn(e.x, e.y, '#aee7ff', 26, {style: 'spark'});
+                particleSystem.spawn(e.x, e.y, '#4da3ff', 10, {style: 'smoke'});
+            } else if(e.kind === 'mimic_transform'){
+                particleSystem.spawn(e.x, e.y, '#999999', 15, {style: 'spark'});
+            } else if(e.kind === 'explosion'){
+                particleSystem.spawn(e.x, e.y, '#ff4500', 30, {style: 'splash'});
+                particleSystem.spawn(e.x, e.y, '#ffcc00', 15, {style: 'fire'});
+            } else if(e.kind === 'smash'){
+                particleSystem.spawn(e.x, e.y, '#ff0000', 20, {style: 'spark'});
+                particleSystem.spawn(e.x, e.y, '#8B0000', 10, {style: 'splash'});
+            } else if(e.kind === 'hook_pull'){
+                particleSystem.spawn(e.x, e.y, '#ffffff', 10, {style: 'ring'});
+            } else if(e.kind === 'dust'){
+                particleSystem.spawn(e.x, e.y, '#dddddd', 10, {style: 'smoke'});
+            }
+        });
+    }
+
+    draw(gameState, particleSystem, inputState) {
         const ctx = this.ctx;
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
@@ -20,10 +65,10 @@ export class Renderer {
         this.drawGrid();
 
         // Draw Plants
-        Object.values(gameState.plants).forEach(p => this.drawPlant(p, gameState));
+        Object.values(gameState.plants).forEach(p => this.drawPlant(p, gameState, inputState));
 
         // Draw Zombies
-        Object.values(gameState.zombies).forEach(z => this.drawZombie(z));
+        Object.values(gameState.zombies).forEach(z => this.drawZombie(z, gameState));
 
         // Draw Bullets
         Object.values(gameState.bullets).forEach(b => this.drawBullet(b));
@@ -42,8 +87,40 @@ export class Renderer {
         }
     }
 
-    drawPlant(p, gameState) {
+    drawPlant(p, gameState, inputState) {
         const ctx = this.ctx;
+        
+        // Highlight if shovel is selected and mouse is over this plant
+        let shouldHighlight = false;
+        if (inputState && inputState.isShovelSelected) {
+             const pc = Math.floor(p.x / Config.CELL_W);
+             const pr = Math.floor(p.y / Config.CELL_H);
+             if (pc === inputState.hoverCol && pr === inputState.hoverRow) {
+                 // Check if this cell has both pumpkin and normal plant
+                 const cellPlants = Object.values(gameState.plants).filter(op => 
+                     Math.floor(op.x/Config.CELL_W) === pc && Math.floor(op.y/Config.CELL_H) === pr
+                 );
+                 const hasPumpkin = cellPlants.some(cp => cp.type === 'spiky_pumpkin');
+                 const hasNormal = cellPlants.some(cp => cp.type !== 'spiky_pumpkin' && cp.type !== 'time_machine' && cp.type !== 'reshaper');
+                 
+                 if (hasPumpkin && hasNormal) {
+                     if (p.type === 'spiky_pumpkin') {
+                         shouldHighlight = inputState.isBottom;
+                     } else if (p.type !== 'spiky_pumpkin' && p.type !== 'time_machine' && p.type !== 'reshaper') {
+                         shouldHighlight = !inputState.isBottom;
+                     }
+                 } else {
+                     // Only one type (or floating), highlight whatever is there
+                     shouldHighlight = true;
+                 }
+             }
+        }
+
+        ctx.save();
+        if (shouldHighlight) {
+            ctx.filter = 'brightness(1.5)';
+        }
+
         const img = this.assetManager.getImage(p.type);
         if (img && img.complete) {
             ctx.drawImage(img, p.x, p.y, Config.PLANT_W, Config.PLANT_H);
@@ -51,6 +128,8 @@ export class Renderer {
             ctx.fillStyle = '#00ff00';
             ctx.fillRect(p.x, p.y, Config.PLANT_W, Config.PLANT_H);
         }
+        ctx.restore();
+
         // HP Bar
         const hpRatio = p.hp / p.max_hp;
         const barH = 6;
@@ -78,7 +157,7 @@ export class Renderer {
         this.drawPlantOverlay(ctx, p, gameState);
     }
 
-    drawZombie(z) {
+    drawZombie(z, gameState) {
         const ctx = this.ctx;
         const img = this.assetManager.getImage(z.type);
         
@@ -95,6 +174,80 @@ export class Renderer {
             ctx.fillRect(z.x, z.y, Config.ZOMBIE_W, Config.ZOMBIE_H);
         }
         ctx.restore();
+
+        // Gargantuar Hammer
+        if(z.type === 'gargantuar' && z.smash_timer > 0){
+            ctx.save();
+            const pivotX = z.x + Config.ZOMBIE_W * 0.7;
+            const pivotY = z.y + Config.ZOMBIE_H * 0.4;
+            
+            const p = z.smash_timer / 1.0; 
+            const angle = -Math.PI/2 - (Math.PI/2 * p);
+            
+            ctx.translate(pivotX, pivotY);
+            ctx.rotate(angle);
+            
+            ctx.fillStyle = '#654321';
+            ctx.fillRect(0, -4, 50, 8);
+            ctx.fillStyle = '#444';
+            ctx.fillRect(50, -15, 25, 30);
+            ctx.restore();
+        }
+
+        // Fisher Line
+        if(z.type === 'fisher' && z.is_hooking && z.hook_target_id){
+            const target = gameState.plants[z.hook_target_id];
+            if(target){
+                const startX = z.x + 10;
+                const startY = z.y + Config.ZOMBIE_H/2;
+                const endX = target.x + Config.PLANT_W/2;
+                const endY = target.y + Config.PLANT_H/2;
+                
+                // Animation: extend line based on charge time (0 to 1.0s)
+                const progress = Math.min(1, (z.hook_charge_time || 0) / 1.0);
+                const curX = startX + (endX - startX) * progress;
+                const curY = startY + (endY - startY) * progress;
+
+                ctx.beginPath();
+                ctx.moveTo(startX, startY);
+                ctx.lineTo(curX, curY);
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                // Hook graphic
+                ctx.fillStyle = '#888';
+                ctx.beginPath();
+                ctx.arc(curX, curY, 5, 0, Math.PI*2);
+                ctx.fill();
+            }
+        }
+
+        // Priest Healing Beam
+        if(z.type === 'priest' && z.heal_target_id){
+            const target = gameState.zombies[z.heal_target_id];
+            if(target){
+                const startX = z.x + Config.ZOMBIE_W/2;
+                const startY = z.y + Config.ZOMBIE_H/2;
+                const endX = target.x + Config.ZOMBIE_W/2;
+                const endY = target.y + Config.ZOMBIE_H/2;
+                
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(startX, startY);
+                ctx.lineTo(endX, endY);
+                ctx.strokeStyle = 'rgba(0, 255, 0, 0.5)';
+                ctx.lineWidth = 4;
+                ctx.stroke();
+                
+                // Pulse effect
+                const time = Date.now() / 200;
+                ctx.strokeStyle = `rgba(200, 255, 200, ${Math.abs(Math.sin(time))})`;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
 
         // HP Bar & Armor Bar
         const barW = Config.ZOMBIE_W;

@@ -7,11 +7,11 @@ class Maguey(Plant):
         super().__init__(col, row, "maguey")
         self.hp = 200
         self.max_hp = 200
-        self.shoot_interval = 1.0
+        self.shoot_interval = 1.5
         self.cost = 300
         self.range = 400
         self.max_flight = 600
-        self.damage = 28
+        self.damage = 32
 
     def shoot(self, game_state):
         # Find nearest zombie within range
