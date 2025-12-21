@@ -46,6 +46,15 @@ class ZombieManager:
         if info:
             self.em.zombies.append(info["class"](row))
 
-    def update(self, now, dt):
+    def update(self, now, dt, start_time):
+        # Brain generation
+        elapsed_minutes = (now - start_time) / 60
+        if elapsed_minutes > 0:
+            brain_rate = 10 * elapsed_minutes * (1 + elapsed_minutes / 4)
+            self.em.brains += brain_rate * dt
+
         for z in self.em.zombies:
             z.update(now, dt, self.em)
+            
+        # Cleanup dead zombies
+        self.em.zombies = [z for z in self.em.zombies if z.hp > 0 and z.active]

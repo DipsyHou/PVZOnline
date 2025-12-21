@@ -46,6 +46,10 @@ export class Renderer {
             } else if(e.kind === 'explosion'){
                 particleSystem.spawn(e.x, e.y, '#ff4500', 30, {style: 'splash'});
                 particleSystem.spawn(e.x, e.y, '#ffcc00', 15, {style: 'fire'});
+            } else if(e.kind === 'christmas_explosion'){
+                particleSystem.spawn(e.x, e.y, null, 5, {style: 'confetti'});
+                // particleSystem.spawn(e.x, e.y, '#ff0000', 10, {style: 'spark'});
+                particleSystem.spawn(e.x, e.y, '#ffffff', 20, {style: 'spark'});
             } else if(e.kind === 'smash'){
                 particleSystem.spawn(e.x, e.y, '#ff0000', 20, {style: 'spark'});
                 particleSystem.spawn(e.x, e.y, '#8B0000', 10, {style: 'splash'});
@@ -79,12 +83,15 @@ export class Renderer {
 
     drawGrid() {
         const ctx = this.ctx;
+        ctx.save();
         ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+        ctx.lineWidth = 1;
         for(let r=0; r<Config.ROWS; r++) {
             for(let c=0; c<Config.COLS; c++) {
                 ctx.strokeRect(c*Config.CELL_W, r*Config.CELL_H, Config.CELL_W, Config.CELL_H);
             }
         }
+        ctx.restore();
     }
 
     drawPlant(p, gameState, inputState) {
@@ -275,11 +282,13 @@ export class Renderer {
 
         // Stun effect (Butter)
         if (z.is_stunned) {
+            ctx.save();
             ctx.fillStyle = '#FFEB3B';
             ctx.fillRect(z.x + Config.ZOMBIE_W/2 - 10, z.y, 20, 15);
             ctx.strokeStyle = '#FBC02D';
             ctx.lineWidth = 2;
             ctx.strokeRect(z.x + Config.ZOMBIE_W/2 - 10, z.y, 20, 15);
+            ctx.restore();
         }
     }
 

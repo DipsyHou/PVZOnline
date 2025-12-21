@@ -18,6 +18,13 @@ export class UIManager {
         if(this.shovelBtn) {
             this.shovelBtn.onclick = () => this.callbacks.onSelectShovel();
         }
+        this.deck = null;
+    }
+
+    setDeck(deck) {
+        this.deck = deck;
+        this.generatedPlantCards = false;
+        this.generatedZombieCards = false;
     }
 
     update(gameState, myRole, selectedItem) {
@@ -49,6 +56,8 @@ export class UIManager {
             }
 
             Object.keys(Config.PLANT_CONFIGS).forEach(type => {
+                // Only update if in deck (or if no deck set, show all)
+                if(this.deck && this.deck.plants && !this.deck.plants.includes(type)) return;
                 this.updatePlantButton(type, Config.PLANT_CONFIGS[type].cost, sun, cooldowns, selectedItem);
             });
 
@@ -65,6 +74,8 @@ export class UIManager {
             if(this.brainsCount) this.brainsCount.textContent = brains;
 
             Object.keys(Config.ZOMBIE_CONFIGS).forEach(type => {
+                // Only update if in deck
+                if(this.deck && this.deck.zombies && !this.deck.zombies.includes(type)) return;
                 this.updateZombieButton(type, Config.ZOMBIE_CONFIGS[type].cost, brains, cooldowns, selectedItem);
             });
         } else {
@@ -97,8 +108,10 @@ export class UIManager {
 
     generatePlantCards() {
         this.plantSlotBar.innerHTML = '';
-        Object.keys(Config.PLANT_CONFIGS).forEach(type => {
+        const list = (this.deck && this.deck.plants) ? this.deck.plants : Object.keys(Config.PLANT_CONFIGS);
+        list.forEach(type => {
             const cfg = Config.PLANT_CONFIGS[type];
+            if(!cfg) return;
             const card = document.createElement('div');
             card.className = 'plant-card';
             card.id = `btn-${type}`;
@@ -117,8 +130,10 @@ export class UIManager {
 
     generateZombieCards() {
         this.zombieSlotBar.innerHTML = '';
-        Object.keys(Config.ZOMBIE_CONFIGS).forEach(type => {
+        const list = (this.deck && this.deck.zombies) ? this.deck.zombies : Object.keys(Config.ZOMBIE_CONFIGS);
+        list.forEach(type => {
             const cfg = Config.ZOMBIE_CONFIGS[type];
+            if(!cfg) return;
             const card = document.createElement('div');
             card.className = 'plant-card'; // Reuse style
             card.id = `btn-${type}`;

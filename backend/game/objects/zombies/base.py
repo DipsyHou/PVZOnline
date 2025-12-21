@@ -51,15 +51,18 @@ class Zombie(GameObject):
         if self.stun_timer > 0: self.stun_timer -= dt
         if self.knockback_timer > 0: self.knockback_timer -= dt
 
-        # Calculate speed
-        current_speed = self.speed
-        if self.slow_timer > 0: current_speed *= self.slow_factor
-        if self.stun_timer > 0: current_speed = 0
-        
-        # Knockback overrides movement
+        # Knockback overrides everything else
         if self.knockback_timer > 0:
             self.x += self.knockback_speed * dt
             return
+
+        # Stunned: no movement, no eating
+        if self.stun_timer > 0:
+            return
+
+        # Calculate speed
+        current_speed = self.speed
+        if self.slow_timer > 0: current_speed *= self.slow_factor
 
         # Attack logic
         eating = False

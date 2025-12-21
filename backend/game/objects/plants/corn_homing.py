@@ -40,6 +40,3 @@ class CornHoming(Plant):
             b.stun = stun
             
             game_state.bullets.append(b)
-            b.homing = True
-            b.target = target
-            game_state.bullets.append(b)

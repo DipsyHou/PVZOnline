@@ -35,16 +35,34 @@ def init_db():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS users 
-                 (username TEXT PRIMARY KEY, password TEXT, wins INTEGER DEFAULT 0)''')
+                 (username TEXT PRIMARY KEY, password TEXT, wins INTEGER DEFAULT 0, 
+                  inventory TEXT DEFAULT '[]', deck TEXT DEFAULT '[]')''')
+    
+    # Check if columns exist (for migration)
+    c.execute("PRAGMA table_info(users)")
+    columns = [info[1] for info in c.fetchall()]
+    if 'inventory' not in columns:
+        c.execute("ALTER TABLE users ADD COLUMN inventory TEXT DEFAULT '[]'")
+    if 'deck' not in columns:
+        c.execute("ALTER TABLE users ADD COLUMN deck TEXT DEFAULT '[]'")
+        
     conn.commit()
     conn.close()
 
 init_db()
 
+# Default Inventory
+DEFAULT_PLANTS = ["peashooter", "sunflower", "pod_peashooter", "watermelon", "pine_shooter"]
+DEFAULT_ZOMBIES = ["normal", "buckethead", "exploder"]
+
 # 数据模型
 class UserAuth(BaseModel):
     username: str
     password: str
+
+class DeckUpdate(BaseModel):
+    username: str
+    deck: Dict[str, List[str]]
 
 # --- 用户 API ---
 
@@ -55,13 +73,61 @@ def register(user: UserAuth):
     try:
         # 简单哈希存储
         pwd_hash = hashlib.sha256(user.password.encode()).hexdigest()
-        c.execute("INSERT INTO users (username, password) VALUES (?, ?)", (user.username, pwd_hash))
+        
+        # Initial inventory
+        inventory = {
+            "plants": DEFAULT_PLANTS,
+            "zombies": DEFAULT_ZOMBIES
+        }
+        # Initial deck (same as inventory for now)
+        deck = {
+            "plants": DEFAULT_PLANTS,
+            "zombies": DEFAULT_ZOMBIES
+        }
+        
+        c.execute("INSERT INTO users (username, password, inventory, deck) VALUES (?, ?, ?, ?)", 
+                  (user.username, pwd_hash, json.dumps(inventory), json.dumps(deck)))
         conn.commit()
         return {"status": "success", "message": "注册成功"}
     except sqlite3.IntegrityError:
         raise HTTPException(status_code=400, detail="用户名已存在")
     finally:
         conn.close()
+
+@app.get("/api/user/inventory")
+def get_inventory(username: str):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("SELECT inventory, deck FROM users WHERE username=?", (username,))
+    result = c.fetchone()
+    conn.close()
+    
+    if result:
+        return {
+            "status": "success", 
+            "inventory": json.loads(result[0]), 
+            "deck": json.loads(result[1])
+        }
+    else:
+        raise HTTPException(status_code=404, detail="User not found")
+
+@app.post("/api/user/deck")
+def update_deck(data: DeckUpdate):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    
+    # Get current deck (check if user exists)
+    c.execute("SELECT deck FROM users WHERE username=?", (data.username,))
+    result = c.fetchone()
+    if not result:
+        conn.close()
+        raise HTTPException(status_code=404, detail="User not found")
+        
+    # Update deck directly
+    c.execute("UPDATE users SET deck=? WHERE username=?", (json.dumps(data.deck), data.username))
+    conn.commit()
+    conn.close()
+    return {"status": "success"}
 
 @app.post("/api/login")
 def login(user: UserAuth):
@@ -105,10 +171,19 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str, username: str =
             await room.handle_command(username, data)
     except WebSocketDisconnect:
         room.disconnect(username)
-        if room.is_empty() and room.state == "waiting":
-            room.running = False
-            room_manager.remove_room(room_id)
-            print(f"Room {room_id} deleted (empty)")
+        if room.is_empty():
+            # 如果是游戏中，给予一定的重连缓冲时间（处理页面跳转）
+            if room.state == "playing":
+                await asyncio.sleep(1)
+                if room.is_empty():
+                    room.running = False
+                    room_manager.remove_room(room_id)
+                    print(f"Room {room_id} deleted (empty playing timeout)")
+            else:
+                # 等待状态直接删除
+                room.running = False
+                room_manager.remove_room(room_id)
+                print(f"Room {room_id} deleted (empty waiting)")
 
 # --- 静态文件服务 ---
 # 挂载前端目录

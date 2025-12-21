@@ -39,9 +39,12 @@ class Game {
 
         this.network = new Network(this.roomId, this.username, {
             onOpen: () => {},
-            onStartGame: (config) => {
+            onStartGame: (config, decks) => {
                 Config.update(config);
                 this.renderer.resize();
+                if(decks && decks[this.username]) {
+                    this.uiManager.setDeck(decks[this.username]);
+                }
             },
             onGameState: (msg) => {
                 this.gameState.update(msg, this.username);

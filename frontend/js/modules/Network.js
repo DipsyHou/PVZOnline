@@ -19,7 +19,7 @@ export class Network {
         this.ws.onmessage = (event) => {
             const msg = JSON.parse(event.data);
             if (msg.type === 'start_game' && msg.config) {
-                if(this.callbacks.onStartGame) this.callbacks.onStartGame(msg.config);
+                if(this.callbacks.onStartGame) this.callbacks.onStartGame(msg.config, msg.decks);
             } else if(msg.type === 'game_state') {
                 if(this.callbacks.onGameState) this.callbacks.onGameState(msg);
             }

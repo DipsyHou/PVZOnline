@@ -26,6 +26,7 @@ from game.objects.plants.corn_gatling import CornGatling
 from game.objects.plants.jelly import Jelly
 from game.objects.plants.binary_tree import BinaryTree
 from game.objects.plants.maguey import Maguey
+from game.objects.plants.christmas_nut import ChristmasNut
 
 class PlantManager:
     def __init__(self, entity_manager):
@@ -58,6 +59,7 @@ class PlantManager:
             "jelly": {"cost": 125, "cooldown": 7, "class": Jelly},
             "binary_tree": {"cost": 175, "cooldown": 7, "class": BinaryTree},
             "maguey": {"cost": 300, "cooldown": 15, "class": Maguey},
+            "christmas_nut": {"cost": 50, "cooldown": 30, "class": ChristmasNut},
         }
 
     def handle_place_plant(self, data, username=None):
@@ -183,6 +185,14 @@ class PlantManager:
     def update(self, dt):
         for p in self.em.plants:
             p.update(dt, self.em)
+        
+        # Cleanup dead plants
+        dead_plants = [p for p in self.em.plants if p.hp <= 0 or not p.active]
+        for p in dead_plants:
+            if hasattr(p, 'on_death'):
+                p.on_death(self.em)
+
+        self.em.plants = [p for p in self.em.plants if p.hp > 0 and p.active]
             
     def transform_plant(self, old_plant, new_type):
         info = self.plant_info.get(new_type)

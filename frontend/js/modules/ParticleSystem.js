@@ -8,15 +8,16 @@ export class ParticleSystem {
         for(let i=0;i<count;i++){
             const angle = Math.random() * Math.PI * 2;
             let vx, vy, life, size, gravity;
+            let text = null;
             
             if(style === 'spark'){
                 // Old spark/debris style
                 const speed = 60 + Math.random()*240;
                 vx = Math.cos(angle)*speed;
-                vy = Math.sin(angle)*speed - 120; // slight upward
+                vy = Math.sin(angle)*speed; // slight upward
                 life = 600;
                 size = 2 + Math.random()*4;
-                gravity = 1200;
+                gravity = 0;
             } else if(style === 'dust'){
                 // Dust: small, falls slowly
                 const speed = 10 + Math.random()*30;
@@ -50,6 +51,20 @@ export class ParticleSystem {
                 life = 300 + Math.random()*300;
                 size = 20 + Math.random()*15;
                 gravity = -100; // Float up
+            } else if(style === 'confetti'){
+
+                const speed = 100 + Math.random()*50;
+                const a = Math.random() * Math.PI * 2;
+                vx = Math.cos(a)*speed;
+                vy = Math.sin(a)*speed;
+                life = 800 + Math.random()*200;
+                gravity = 80;
+                
+                // Christmas decorations
+                const decorations = ['🎄', '🎁', '❄️', '🔔'];
+                text = decorations[Math.floor(Math.random() * decorations.length)];
+                size = 30 + Math.random() * 15;
+
             } else {
                 // Smoke style (default)
                 const speed = 10 + Math.random() * 80;
@@ -64,7 +79,7 @@ export class ParticleSystem {
             // slight jitter in spawn position
             const px = x + (Math.random() - 0.5) * 12;
             const py = y + (Math.random() - 0.5) * 8;
-            this.particles.push({x: px, y: py, vx: vx, vy: vy, life: life, maxLife: life, color: col, size: size, gravity: gravity});
+            this.particles.push({x: px, y: py, vx: vx, vy: vy, life: life, maxLife: life, color: col, size: size, gravity: gravity, text: text});
         }
     }
 
@@ -92,9 +107,18 @@ export class ParticleSystem {
     draw(ctx) {
         for(const p of this.particles){
             const alpha = Math.max(0, p.life / p.maxLife);
-            ctx.fillStyle = p.color || '#ffb36b';
             ctx.globalAlpha = alpha;
-            ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+            
+            if (p.text) {
+                ctx.font = `${p.size}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#ffffff'; // Default color for text if needed, though emojis have their own colors
+                ctx.fillText(p.text, p.x, p.y);
+            } else {
+                ctx.fillStyle = p.color || '#ffb36b';
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+            }
             ctx.globalAlpha = 1;
         }
     }

@@ -17,6 +17,7 @@ class Room:
         self.game: Optional[Game] = None
         self.running = False
         self.roles = {} # username -> role
+        self.player_decks = {} # username -> {plants: [], zombies: []}
 
     async def connect(self, websocket: WebSocket, username: str):
         await websocket.accept()
@@ -42,7 +43,8 @@ class Room:
                     "ZOMBIE_H": ZOMBIE_H,
                     "BULLET_W": BULLET_W,
                     "BULLET_H": BULLET_H
-                }
+                },
+                "decks": self.player_decks
             })
             # Send full state immediately
             if self.game:
@@ -100,6 +102,11 @@ class Room:
             await self.broadcast_room_state()
             return
 
+        if data['type'] == 'set_deck':
+            deck = data.get('deck', {})
+            self.player_decks[username] = deck
+            return
+
         if self.state == "waiting":
             if data['type'] == 'start_game' and username == self.host:
                 self.state = "playing"
@@ -133,7 +140,8 @@ class Room:
                         "ZOMBIE_H": ZOMBIE_H,
                         "BULLET_W": BULLET_W,
                         "BULLET_H": BULLET_H
-                    }
+                    },
+                    "decks": self.player_decks
                 })
                 
                 # Initialize Game

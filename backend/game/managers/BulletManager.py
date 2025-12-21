@@ -94,3 +94,6 @@ class BulletManager:
                     "y": b.y, 
                     "kind": b.kind + "_splash"
                 })
+
+        # Cleanup dead bullets
+        self.em.bullets = [b for b in self.em.bullets if b.active]

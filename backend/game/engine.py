@@ -44,23 +44,12 @@ class Game:
         dt = now - (self.last_time if hasattr(self, 'last_time') else now)
         self.last_time = now
         
-        # Brain generation
-        elapsed_minutes = (now - self.start_time) / 60
-        if elapsed_minutes > 0:
-            brain_rate = 10 * elapsed_minutes * (1 + elapsed_minutes / 4)
-            self.em.brains += brain_rate * dt
-
         if self.wave_manager:
             self.wave_manager.update(dt)
 
         self.plant_manager.update(dt)
-        self.zombie_manager.update(now, dt)
+        self.zombie_manager.update(now, dt, self.start_time)
         self.bullet_manager.update(dt)
-        
-        # Cleanup dead objects
-        self.em.plants = [p for p in self.em.plants if p.hp > 0 and p.active]
-        self.em.zombies = [z for z in self.em.zombies if z.hp > 0 and z.active]
-        self.em.bullets = [b for b in self.em.bullets if b.active]
 
     def get_state(self):
         now = time.time()

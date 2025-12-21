@@ -26,6 +26,7 @@ export const PLANT_CONFIGS = {
     jelly: { name: '果冻', cost: 125, cooldown: 7, img: 'assets/svg/jelly.svg' },
     binary_tree: { name: '二叉树', cost: 175, cooldown: 7, img: 'assets/svg/binary_tree.svg' },
     maguey: { name: '龙舌兰', cost: 300, cooldown: 15, img: 'assets/png/maguey.png' },
+    christmas_nut: { name: '圣诞坚果', cost: 50, cooldown: 30, img: 'assets/png/christmas-nut.png' },
 };
 
 export const ZOMBIE_CONFIGS = {
