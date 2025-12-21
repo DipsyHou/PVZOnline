@@ -1,0 +1,21 @@
+<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Mushroom Stalk -->
+  <path d="M35,75 Q30,75 32,55 L35,40 L45,40 L48,55 Q50,75 45,75 Z" fill="#D8BFD8" stroke="#4B0082" stroke-width="2"/>
+  
+  <!-- Mushroom Cap -->
+  <path d="M15,40 Q10,40 10,30 Q10,10 40,5 Q70,10 70,30 Q70,40 65,40 Z" fill="#9400D3" stroke="#4B0082" stroke-width="2"/>
+  
+  <!-- Spots on Cap (Glowing) -->
+  <circle cx="25" cy="20" r="4" fill="#E0B0FF" opacity="0.8"/>
+  <circle cx="55" cy="25" r="3" fill="#E0B0FF" opacity="0.8"/>
+  <circle cx="40" cy="15" r="5" fill="#E0B0FF" opacity="0.8"/>
+  
+  <!-- Visor / Eyes (Laser source) -->
+  <rect x="30" y="32" width="20" height="6" rx="2" fill="#00FFFF" stroke="#008B8B" stroke-width="1"/>
+  
+  <!-- Laser Glow effect around visor -->
+  <path d="M30,35 L20,35 M50,35 L60,35" stroke="#00FFFF" stroke-width="2" opacity="0.6"/>
+  
+  <!-- Base shadow -->
+  <ellipse cx="40" cy="76" rx="15" ry="3" fill="rgba(0,0,0,0.3)"/>
+</svg>

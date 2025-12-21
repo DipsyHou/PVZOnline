@@ -1,0 +1,33 @@
+<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  
+  <!-- Colony Base (Organic blob shape) -->
+  <path d="M10,40 Q10,10 40,10 Q70,10 70,40 Q70,70 40,70 Q10,70 10,40 Z" fill="#8BC34A" opacity="0.3"/>
+  
+  <!-- Bacteria/Spores -->
+  <circle cx="28" cy="32" r="8" fill="#4CAF50" stroke="#2E7D32" stroke-width="1"/>
+  <circle cx="52" cy="32" r="9" fill="#4CAF50" stroke="#2E7D32" stroke-width="1"/>
+  <circle cx="40" cy="55" r="10" fill="#4CAF50" stroke="#2E7D32" stroke-width="1"/>
+  <circle cx="20" cy="50" r="6" fill="#66BB6A" stroke="#2E7D32" stroke-width="1"/>
+  <circle cx="60" cy="48" r="6" fill="#66BB6A" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Decomposition/Recycle Arrows (Subtle) -->
+  <path d="M35,25 L45,25 L40,20 Z" fill="#FFD700" opacity="0.8"/>
+  <path d="M55,40 L55,50 L60,45 Z" fill="#FFD700" opacity="0.8" transform="rotate(120 55 45)"/>
+  <path d="M25,45 L25,55 L20,50 Z" fill="#FFD700" opacity="0.8" transform="rotate(240 25 50)"/>
+  
+  <!-- Energy Particles (Rising) -->
+  <circle cx="40" cy="30" r="3" fill="#FFEB3B" filter="url(#glow)">
+    <animate attributeName="cy" from="30" to="15" dur="1s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" from="1" to="0" dur="1s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="30" cy="40" r="2" fill="#FFEB3B" filter="url(#glow)">
+    <animate attributeName="cy" from="40" to="25" dur="1.2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" from="1" to="0" dur="1.2s" repeatCount="indefinite"/>
+  </circle>
+</svg>

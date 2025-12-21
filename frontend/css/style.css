@@ -68,3 +68,143 @@ canvas {
     border: 4px solid #553300;
     box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
+/* --- Lobby Page Styles --- */
+
+.lobby-container {
+    width: 380px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+}
+
+#room-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    padding-right: 5px;
+    min-height: 200px;
+}
+
+/* Scrollbar styling */
+#room-list::-webkit-scrollbar { width: 6px; }
+#room-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 3px; }
+#room-list::-webkit-scrollbar-thumb { background: #27ae60; border-radius: 3px; }
+#room-list::-webkit-scrollbar-thumb:hover { background: #2ecc71; }
+
+/* Compact room card styles */
+#room-list .mode-card {
+    padding: 12px 15px;
+    margin: 8px 0 !important; /* Override JS inline style */
+    background: #34495e;
+    border-radius: 6px;
+    border: 1px solid #466075;
+    transition: all 0.2s;
+    text-align: left;
+}
+#room-list .mode-card:hover {
+    transform: translateX(3px);
+    border-color: #2ecc71;
+    background: #3d566e;
+}
+#room-list .mode-card h3 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    color: #fff;
+}
+#room-list .mode-card p {
+    margin: 2px 0;
+    font-size: 12px;
+    color: #bdc3c7;
+}
+
+/* --- Warehouse Page Styles --- */
+
+.warehouse-body {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+    align-items: flex-start;
+    padding: 40px 0;
+}
+
+.warehouse-container {
+    width: 90%;
+    max-width: 1000px;
+    height: auto;
+    overflow: visible;
+}
+
+.warehouse-container .card-grid { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 15px; 
+    margin-bottom: 30px; 
+    justify-content: center; 
+}
+
+.warehouse-container .card { 
+    width: 100px; 
+    height: 130px; 
+    border: 1px solid #555; 
+    padding: 8px; 
+    text-align: center; 
+    background: rgba(255, 255, 255, 0.05); 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    color: #eee;
+}
+
+.warehouse-container .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.warehouse-container .card img { 
+    width: 60px; 
+    height: 60px; 
+    object-fit: contain; 
+    margin-bottom: 8px; 
+}
+
+.warehouse-container .card.owned { 
+    border-color: #2ecc71; 
+    background: rgba(46, 204, 113, 0.15); 
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.2);
+}
+
+.warehouse-container .card.locked { 
+    border-color: #7f8c8d; 
+    background: rgba(0, 0, 0, 0.2); 
+    opacity: 0.6; 
+    filter: grayscale(100%); 
+}
+
+.warehouse-container .card-name { 
+    font-size: 13px; 
+    font-weight: bold; 
+    margin-bottom: 4px; 
+}
+
+.warehouse-container .card-status { 
+    font-size: 11px; 
+    color: #e74c3c; 
+}
+
+.warehouse-container .card.owned .card-status { 
+    color: #2ecc71; 
+}
+
+.warehouse-container h2, .warehouse-container h3 { 
+    text-align: center; 
+}
+
+.warehouse-container h3 { 
+    border-bottom: 1px solid #555; 
+    padding-bottom: 10px; 
+    margin-top: 30px; 
+}

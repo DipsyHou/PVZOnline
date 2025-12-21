@@ -1,0 +1,23 @@
+<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Robe -->
+  <path d="M20 70 L25 30 L55 30 L60 70 Z" fill="#9C27B0" stroke="#4A148C" stroke-width="2"/>
+  
+  <!-- Head -->
+  <circle cx="40" cy="25" r="12" fill="#BDBDBD" stroke="#616161" stroke-width="2"/>
+  
+  <!-- Eyes -->
+  <circle cx="36" cy="23" r="2" fill="#FFF"/>
+  <circle cx="44" cy="23" r="2" fill="#FFF"/>
+  
+  <!-- Hat (Mitre) -->
+  <path d="M30 18 L40 2 L50 18 Z" fill="#FFD700" stroke="#F57F17" stroke-width="2"/>
+  <path d="M40 2 L40 18" stroke="#F57F17" stroke-width="2"/>
+  
+  <!-- Staff -->
+  <line x1="65" y1="20" x2="65" y2="70" stroke="#795548" stroke-width="3"/>
+  <circle cx="65" cy="20" r="5" fill="#00E676" stroke="#1B5E20" stroke-width="1"/>
+  
+  <!-- Arms -->
+  <path d="M25 40 L15 50" stroke="#9C27B0" stroke-width="4" stroke-linecap="round"/>
+  <path d="M55 40 L65 40" stroke="#9C27B0" stroke-width="4" stroke-linecap="round"/>
+</svg>

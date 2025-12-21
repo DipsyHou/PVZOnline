@@ -1,0 +1,44 @@
+<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Back Leaves -->
+  <path d="M10 60 Q5 40 20 40" fill="#4CAF50" stroke="#2E7D32" stroke-width="2"/>
+  
+  <!-- Main Body (Corn Cob) -->
+  <ellipse cx="30" cy="45" rx="20" ry="25" fill="#FFEB3B" stroke="#FBC02D" stroke-width="2"/>
+  
+  <!-- Texture (Kernels) -->
+  <g fill="#FDD835">
+    <circle cx="20" cy="35" r="3"/> <circle cx="30" cy="35" r="3"/> <circle cx="40" cy="35" r="3"/>
+    <circle cx="20" cy="45" r="3"/> <circle cx="30" cy="45" r="3"/> <circle cx="40" cy="45" r="3"/>
+    <circle cx="25" cy="55" r="3"/> <circle cx="35" cy="55" r="3"/>
+  </g>
+
+  <!-- Helmet -->
+  <path d="M8 25 Q30 5 52 25 L52 32 L8 32 Z" fill="#558B2F" stroke="#33691E" stroke-width="2"/>
+  <rect x="10" y="28" width="40" height="4" fill="#33691E"/>
+  <!-- Star -->
+  <polygon points="30,12 32,17 37,17 33,20 35,25 30,22 25,25 27,20 23,17 28,17" fill="#FFD700"/>
+
+  <!-- Face -->
+  <circle cx="22" cy="38" r="4" fill="black"/>
+  <circle cx="38" cy="38" r="4" fill="black"/>
+  <!-- Angry Eyebrows -->
+  <path d="M18 34 L26 36" stroke="black" stroke-width="2"/>
+  <path d="M42 34 L34 36" stroke="black" stroke-width="2"/>
+
+  <!-- Gun Assembly (Protruding from mouth area) -->
+  <g transform="translate(40, 45)">
+    <!-- Barrels (Dark pipes) -->
+    <rect x="0" y="-6" width="30" height="4" fill="#424242" stroke="#212121"/>
+    <rect x="0" y="2" width="30" height="4" fill="#424242" stroke="#212121"/>
+    <rect x="0" y="-2" width="32" height="4" fill="#616161" stroke="#212121"/>
+    
+    <!-- Muzzle Flash / Tip -->
+    <rect x="28" y="-7" width="4" height="14" fill="#212121"/>
+    
+    <!-- Connection to face -->
+    <circle cx="0" cy="0" r="8" fill="#4CAF50" stroke="#2E7D32"/>
+  </g>
+  
+  <!-- Front Leaves -->
+  <path d="M10 65 Q30 80 50 65" fill="#4CAF50" stroke="#2E7D32" stroke-width="2"/>
+</svg>

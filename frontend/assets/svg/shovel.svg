@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="handleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8d6e63"/>
+      <stop offset="50%" stop-color="#a1887f"/>
+      <stop offset="100%" stop-color="#8d6e63"/>
+    </linearGradient>
+    <linearGradient id="metalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e0e0e0"/>
+      <stop offset="50%" stop-color="#bdbdbd"/>
+      <stop offset="100%" stop-color="#9e9e9e"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Handle -->
+  <path d="M45 90 L55 90 L55 40 L45 40 Z" fill="url(#handleGrad)" stroke="#5d4037" stroke-width="2"/>
+  
+  <!-- Blade -->
+  <path d="M30 40 Q50 10 70 40 L70 60 Q50 70 30 60 Z" fill="url(#metalGrad)" stroke="#616161" stroke-width="2"/>
+  
+  <!-- Shine -->
+  <path d="M35 45 Q45 30 55 45" fill="none" stroke="#fff" stroke-width="2" opacity="0.6"/>
+</svg>

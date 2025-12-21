@@ -1,0 +1,26 @@
+<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Stem -->
+  <path d="M40,80 Q35,60 40,40" stroke="#4CAF50" stroke-width="4" fill="none"/>
+  <!-- Leaves -->
+  <path d="M40,75 Q25,65 25,75 Q35,80 40,78" fill="#4CAF50"/>
+  <path d="M40,75 Q55,65 55,75 Q45,80 40,78" fill="#4CAF50"/>
+  
+  <!-- Windmill Head -->
+  <g transform="translate(40,40)">
+    <g>
+      <animateTransform attributeName="transform" type="rotate" from="0 0 0" to="360 0 0" dur="2s" repeatCount="indefinite" />
+      <!-- Blades -->
+      <path d="M0,0 C-5,-15 -15,-30 0,-35 C15,-30 5,-15 0,0" fill="#87CEEB" stroke="#00BFFF" stroke-width="1"/>
+      <path d="M0,0 C15,-5 30,-15 35,0 C30,15 15,5 0,0" fill="#87CEEB" stroke="#00BFFF" stroke-width="1"/>
+      <path d="M0,0 C5,15 15,30 0,35 C-15,30 -5,15 0,0" fill="#87CEEB" stroke="#00BFFF" stroke-width="1"/>
+      <path d="M0,0 C-15,5 -30,15 -35,0 C-30,-15 -15,-5 0,0" fill="#87CEEB" stroke="#00BFFF" stroke-width="1"/>
+    </g>
+    
+    <!-- Center -->
+    <circle cx="0" cy="0" r="6" fill="#FFD700" stroke="#FFA000" stroke-width="1"/>
+  </g>
+  
+  <!-- Wind particles effect hint -->
+  <path d="M10,20 Q20,10 30,20" stroke="#FFF" stroke-width="2" fill="none" opacity="0.5"/>
+  <path d="M60,60 Q70,70 80,60" stroke="#FFF" stroke-width="2" fill="none" opacity="0.5"/>
+</svg>

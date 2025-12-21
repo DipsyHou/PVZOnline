@@ -1,0 +1,20 @@
+CELL_W = 100
+CELL_H = 100
+ROWS = 7
+COLS = 11
+
+# Derived constants
+SCREEN_WIDTH = (COLS + 1) * CELL_W
+SCREEN_HEIGHT = ROWS * CELL_H
+
+# Plants
+PLANT_W = 80
+PLANT_H = 80
+
+# Zombies
+ZOMBIE_W = 75
+ZOMBIE_H = 100
+
+# Bullets
+BULLET_W = 20
+BULLET_H = 20

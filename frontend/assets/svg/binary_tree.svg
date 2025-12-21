@@ -1,0 +1,28 @@
+<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Trunk -->
+  <rect x="36" y="55" width="8" height="25" fill="#8B4513" />
+  
+  <!-- Main Branch Left -->
+  <path d="M40 55 Q30 40 20 30" stroke="#8B4513" stroke-width="5" fill="none" />
+  <!-- Main Branch Right -->
+  <path d="M40 55 Q50 40 60 30" stroke="#8B4513" stroke-width="5" fill="none" />
+
+  <!-- Leaves/Nodes -->
+  <!-- Root Node (Head) -->
+  <circle cx="40" cy="55" r="12" fill="#228B22" stroke="#006400" stroke-width="2"/>
+  
+  <!-- Left Child Node -->
+  <circle cx="20" cy="30" r="10" fill="#32CD32" stroke="#006400" stroke-width="2"/>
+  
+  <!-- Right Child Node -->
+  <circle cx="60" cy="30" r="10" fill="#32CD32" stroke="#006400" stroke-width="2"/>
+  
+  <!-- Face on Root -->
+  <circle cx="36" cy="53" r="2" fill="black" />
+  <circle cx="44" cy="53" r="2" fill="black" />
+  <path d="M37 59 Q40 62 43 59" stroke="black" stroke-width="1.5" fill="none" />
+  
+  <!-- Binary 0/1 details -->
+  <text x="16" y="34" font-family="monospace" font-size="10" fill="#004d00" font-weight="bold">0</text>
+  <text x="56" y="34" font-family="monospace" font-size="10" fill="#004d00" font-weight="bold">1</text>
+</svg>

@@ -1,0 +1,142 @@
+PVZOnline 额外总结：强度梯队 / 推荐卡组思路 / 优先修 Bug 清单
+生成时间：2025-12-20
+说明：本文件是对 [PVZOnline/unit_reviews.txt] 的浓缩补充，结论基于“当前代码实现”，并默认多人模式存在 player_states。
+
+====================
+一、强度梯队（按“对局影响力+性价比+稳定性”综合）
+====================
+
+【植物梯队】
+
+S（很容易成为“必带/版本答案”，强烈建议重点平衡）
+- 追踪玉米 corn_homing：当前实现存在“双 append”Bug，导致实际强度被抬高；即使修掉Bug，其“全图追踪+黄油2s眩晕”仍是顶级干预。
+- 重塑者 reshaper：0.1s近乎即时，且“退款+清冷却”并对所有玩家生效，属于资源与节奏双作弊；多人会进一步放大。
+- 号角 trumpet：3秒/4秒几乎常驻的“子弹改行+拉拽”，成本50，能把大量火力强行聚焦，低费高收益。
+- 圣诞坚果 christmas_nut：cost=50、HP=2000、亡语3×3 900，对推进方惩罚极大，低费可铺量。
+
+A（非常强，但仍有明确门槛/对策；作为核心体系合理）
+- 西瓜 watermelon：稳定的大范围溅射体系，风车加成后更强。
+- 狂野机枪 wild_gatling：爆发弹幕上限高，与火炬树桩/号角联动极强。
+- 尖刺南瓜 spiky_pumpkin：4000血+对爆破特殊保护逻辑，让防线极稳，是反自爆核心。
+- 冰椰子 iced_coconut：一次性高爆发+长减速，但“不可被啃”使其稳定性偏高（强度随此特性上升）。
+- 双椒 jalapeno_pair：十字1800清场，属于高影响技能卡。
+- 电极樱桃 electrode_cherry：成对后90DPS线段判定，控线能力强。
+
+B（强度良好、定位清晰，通常是“体系拼图/性价比位”）
+- 火炬树桩 torchwood：纯放大器，强度取决于你带多少可点燃子弹体系。
+- 玉米加特林 corn_gatling：持续接敌时会升温到0.4s射速，强但需要战场条件。
+- 豆荚射手 pod_peashooter：跨行触发使其常开火，偏强但散射导致单体效率有限。
+- 二叉树 binary_tree：命中分裂清群很强，但弹幕量与站位依赖更明显。
+- 龙舌兰 maguey：最近目标点杀稳定，泛用但缺乏爆发或AoE。
+- 松针射手 pine_shooter：直线穿透稳定，主要怕高护甲。
+
+C（可用但更偏对局特化/或被更强单位替代）
+- 豌豆射手 peashooter：基准位，后期常被上位替换或作为低费填充。
+- 激光蘑菇 laser_shroom：星形格伤害模型有趣，但依赖站位与CELL_W写死；强度波动。
+- 风车 windmill：强，但不产出，且容易导致“固定模板”；更像体系件。
+- 藤蔓陷阱 vine_trap：控场强，但上限取决于对手是否有爆发/突进；叠放可能偏拖。
+- 向日葵 sunflower：多人共享收益会很强；若未来改成归属制则回归正常的经济位。
+- 金盏花 gold_bloom：8秒后500阳光的跳档很爽，但被针对会亏；多人共享会偏强。
+
+D（目前价值偏低或定位尴尬，需要数值/交互补强）
+- 拟态 mimic：成本高、3秒延迟，若多人共享 last_planted_type 会出现“目标漂移”风险；强度不稳定。
+- 时光机 time_machine：重置冷却很强，但同样存在多人共享爆发风险；单人模式下则更合理。
+- 炸弹投手 bomber：目前 bomb 的 splash 参数不完整（splash_damage未设），体验可能与“爆炸预期”不一致。
+- 果冻 jelly：反弹有趣但属于对局特化；遇到抛射/大球/西瓜等免疫时存在感下降。
+- 忍者坚果 ninja_nut：单卡可铺3个高血墙，理论很强；但如果对局里常常空位不足或被自爆/推搡针对，价值会波动（需要实战数据验证）。
+
+【僵尸梯队】
+
+S
+- 推搡橄榄球 football_forward：高速度+高头盔，且可“推走植物破阵”；对阵地破坏能力强。
+- 牧师 priest：50HP/s治疗、3格找目标，能显著提高肉盾有效血量；多牧师叠加上限很高。
+
+A
+- 巨人 gargantuar：4500血、1秒一锤9999秒杀植物，终局威胁明确；受控场影响大但仍强。
+- 自爆 exploder：速度快、3×3拆阵，且被南瓜硬克形成清晰博弈。
+
+B
+- 橄榄球 football：高速重装但无技能，吃控制体系。
+- 渔夫 fisher：钩子破阵很有趣，但受“右侧格是否空”限制，强度看场面。
+
+C
+- 铁桶 buckethead：数值肉盾，怕大招/范围爆发。
+- 普通 normal：节奏基准单位。
+
+====================
+二、推荐卡组思路（按“植物侧/僵尸侧”给模板）
+====================
+
+【植物侧：推荐 3 套思路】
+
+1) 溅射重炮成型（稳健后期）
+核心：sunflower / gold_bloom（经济二选一或都带） + watermelon + spiky_pumpkin
+增强：windmill（放大西瓜） + vine_trap（控场拖到成型）
+补位：peashooter 或 pine_shooter（前期过渡）
+对策点：防 exploder 靠 spiky_pumpkin；防 football_forward 建议用“填满相邻行同列”降低推搡成功率。
+
+2) 弹幕爆发体系（短时间压制）
+核心：wild_gatling + torchwood
+增强：trumpet（把弹幕拉到关键行） + spiky_pumpkin（保护核心位）
+补位：corn_gatling（持续输出）或 pod_peashooter（跨行压制）
+风险：这套对 trumpet/torchwood 依赖高，且可能在平衡上过强；如果对面有 jelly 反弹，会让部分弹幕变得不可控。
+
+3) 技能控场/翻盘套（高技能密度）
+核心：jalapeno_pair + iced_coconut + citron（手动释放）
+增强：time_machine（让关键牌更频繁）
+补位：sunflower 或 gold_bloom（保证能付得起高费技能）
+说明：该体系更像“法术卡组”，靠正确时机一次打穿推进；若 reshaper 仍保持现状，会让这套变成资源循环的超模版本（不建议在平衡前作为常驻推荐）。
+
+【僵尸侧：推荐 2 套思路】
+
+1) 破阵推进（打穿阵地）
+核心：football_forward + exploder
+增强：fisher（钩走关键炮台造成火力断档）
+补位：normal（填充推进密度）
+要点：优先制造“相邻行空格”让推搡成功；对手南瓜多则用 exploder 消耗南瓜耐久。
+
+2) 续航编队（把肉盾变成怪物）
+核心：buckethead/football/football_forward + priest
+增强：gargantuar 作为终局压力
+补位：normal（前期经济与节奏）
+要点：牧师治疗时会停下来不推进，因此要保证前排有足够密度，否则会出现“奶在原地、前线断档”。
+
+====================
+三、需要优先修的 Bug / 代码风险清单（按严重度排序）
+====================
+
+P0（强烈建议立刻修，会直接影响平衡或产生异常行为）
+1) corn_homing 双 append 同一子弹对象
+- 位置：backend/game/objects/plants/corn_homing.py
+- 现象：同一个 Bullet(b) 被 game_state.bullets.append(b) 两次，导致更新/碰撞可能被结算两次，强度失真，且可能引发非预期。
+- 建议：删掉重复 append；若本意是“双发”，应创建两个不同 Bullet 实例（b1/b2）。
+
+2) 多处使用硬编码 CELL_W=100 / CELL_H=100 推列行
+- 位置：backend/game/objects/plants/trumpet.py、laser_shroom.py 等
+- 现象：若常量 CELL_W 并非 100 或后续调整格子尺寸，会导致范围判定、吸引判定与视觉/命中错位。
+- 建议：统一改用 constants.CELL_W/CELL_H，避免魔法数字。
+
+P1（建议尽快修，会造成体验与直觉不一致或潜在不平衡）
+3) bomber 的 bomb 溅射参数不完整
+- 位置：backend/game/objects/plants/bomber.py
+- 现象：设置了 splash_radius=8 但未设置 splash_damage；落地爆炸逻辑在 BulletManager 里依赖 splash_damage 才能造成范围伤害。
+- 影响：看起来是爆炸，实际上可能只打到很少或不如预期。
+- 建议：明确设计：若要范围伤害，补齐 splash_damage；若要单点弹，移除爆炸外观或 splash 相关字段。
+
+4) trumpet 吸引判定与 bullet.row 强制改写可能导致“视觉轨迹/命中行不一致”
+- 位置：backend/game/objects/plants/trumpet.py
+- 说明：这是设计选择还是Bug需要明确；若是设计，建议加强前端反馈（子弹明显被拉拽）。
+
+P2（中期优化项，可能影响多人公平性/长期可维护性）
+5) sunflower / gold_bloom / reshaper / time_machine 对所有玩家共享收益
+- 位置：backend/game/objects/plants/sunflower.py、gold_bloom.py、reshaper.py、time_machine.py
+- 风险：多人会放大滚雪球、造成资源外溢；也会出现“队友白嫖收益”的平衡问题。
+- 建议：按 plant.owner 归属发放/重置；或给共享玩法配套反制（例如僵尸侧也有团队收益机制）。
+
+6) ninja_nut 网格边界写死为 11×7
+- 位置：backend/game/objects/plants/ninja_nut.py
+- 风险：未来改地图尺寸会出错。
+- 建议：改用 constants.COLS/ROWS。
+
+——
+如果你希望我把上述 P0/P1 直接修到代码里并跑一轮最小验证（例如 lint/启动服务/简单对局），我可以继续执行。

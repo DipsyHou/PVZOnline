@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Zombie Group -->
+  <g transform="translate(20, 10)">
+    <!-- Legs -->
+    <path d="M15 60 L15 90 L25 90 L25 60 Z" fill="#5d4037" />
+    <path d="M35 60 L35 90 L45 90 L45 60 Z" fill="#5d4037" />
+    <!-- Shoes -->
+    <path d="M13 85 L27 85 L27 90 L13 90 Z" fill="#000" />
+    <path d="M33 85 L47 85 L47 90 L33 90 Z" fill="#000" />
+
+    <!-- Torso (Blue Coat) -->
+    <path d="M15 35 L45 35 L50 60 L10 60 Z" fill="#3f51b5" />
+    <!-- Tie -->
+    <path d="M28 35 L32 35 L30 45 Z" fill="#e91e63" />
+    
+    <!-- Arms (Green Skin) -->
+    <path d="M10 38 L5 55 L12 55 L15 40" fill="#7cb342" /> <!-- Left Arm -->
+    <path d="M50 38 L55 55 L48 55 L45 40" fill="#7cb342" /> <!-- Right Arm -->
+    
+    <!-- Head (Green Skin) -->
+    <circle cx="30" cy="20" r="14" fill="#7cb342" />
+    
+    <!-- Face -->
+    <circle cx="25" cy="18" r="3" fill="#fff" /> <!-- Left Eye -->
+    <circle cx="25" cy="18" r="1" fill="#000" />
+    <circle cx="35" cy="18" r="3" fill="#fff" /> <!-- Right Eye -->
+    <circle cx="35" cy="18" r="1" fill="#000" />
+    <path d="M25 28 Q30 32 35 28" stroke="#000" stroke-width="1" fill="none" /> <!-- Mouth -->
+    
+    <!-- Bomb Helmet -->
+    <g transform="translate(30, 6)">
+      <!-- Bomb Body -->
+      <circle cx="0" cy="0" r="16" fill="#212121" />
+      <!-- Shine -->
+      <ellipse cx="-6" cy="-6" rx="5" ry="3" fill="#616161" transform="rotate(-45)" />
+      
+      <!-- Fuse Holder -->
+      <rect x="-5" y="-18" width="10" height="5" fill="#424242" />
+      
+      <!-- Fuse -->
+      <path d="M0 -18 Q0 -26 8 -28" stroke="#d7ccc8" stroke-width="2" fill="none" />
+      
+      <!-- Spark -->
+      <circle cx="8" cy="-28" r="2" fill="#ffeb3b" />
+      <g stroke="#ff9800" stroke-width="1">
+        <line x1="8" y1="-28" x2="11" y2="-31" />
+        <line x1="8" y1="-28" x2="5" y2="-31" />
+        <line x1="8" y1="-28" x2="8" y2="-32" />
+      </g>
+      
+      <!-- Skull Icon -->
+      <path d="M-5 4 Q-5 0 0 0 Q5 0 5 4 Q5 7 3 8 L3 10 L-3 10 L-3 8 Q-5 7 -5 4" fill="#fff" transform="scale(0.7) translate(0, 2)" />
+      <circle cx="-2" cy="4" r="1" fill="#000" transform="scale(0.7) translate(0, 2)" />
+      <circle cx="2" cy="4" r="1" fill="#000" transform="scale(0.7) translate(0, 2)" />
+    </g>
+  </g>
+</svg>
