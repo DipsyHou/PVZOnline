@@ -4,10 +4,10 @@ from ...constants import CELL_W, CELL_H
 class VineTrap(Plant):
     def __init__(self, col, row):
         super().__init__(col, row, "vine_trap")
-        self.hp = 800
-        self.max_hp = 800
+        self.hp = 500
+        self.max_hp = 500
         self.shoot_interval = 0
-        self.cost = 225
+        self.cost = 125
         self.life_timer = 0
 
     def update(self, dt, game_state):

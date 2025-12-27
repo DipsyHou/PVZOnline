@@ -19,7 +19,7 @@ class PineShooter(Plant):
         if has_target:
             bx = self.x + 40
             by = self.y + 20
-            b = Bullet(bx, by, self.row, 720, 0, 20, "needle")
+            b = Bullet(bx, by, self.row, 720, 0, 14, "needle")
             b.pierce = 999
             b.w = 8 # Needle is thin
             b.h = 8

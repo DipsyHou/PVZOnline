@@ -8,7 +8,7 @@ class PodPeashooter(Plant):
         super().__init__(col, row, "pod_peashooter")
         self.hp = 200
         self.max_hp = 200
-        self.shoot_interval = 1.0
+        self.shoot_interval = 1.5
         self.cost = 225
 
     def shoot(self, game_state):

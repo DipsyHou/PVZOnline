@@ -3,8 +3,8 @@ from .base import Plant
 class NinjaNut(Plant):
     def __init__(self, col, row):
         super().__init__(col, row, "ninja_nut")
-        self.hp = 4000
-        self.max_hp = 4000
+        self.hp = 2000
+        self.max_hp = 2000
         self.shoot_interval = float('inf')
         self.cost = 100
         self.has_spawned_extras = False
@@ -27,6 +27,7 @@ class NinjaNut(Plant):
                     if not any(p.col == target_col and p.row == target_row for p in game_state.plants):
                         # Create new NinjaNut
                         new_plant = NinjaNut(target_col, target_row)
+                        new_plant.hp = 1000
                         new_plant.has_spawned_extras = True
                         game_state.plants.append(new_plant)
                         spawned_count += 1

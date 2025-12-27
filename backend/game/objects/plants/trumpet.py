@@ -35,7 +35,7 @@ class Trumpet(Plant):
             target_y = self.row * CELL_H + CELL_H / 2 - 10 # Center of row (approx)
 
             for b in game_state.bullets:
-                if b.kind in ["watermelon", "bomb", "citron_plasma", "arrow"]: continue
+                if b.kind in ["watermelon", "bomb", "citron_plasma", "arrow", "grape"]: continue
                 
                 b_col = int(b.x / 100) # Assuming CELL_W=100
                 b_row = int(b.y / 100)

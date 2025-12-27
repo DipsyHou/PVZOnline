@@ -8,7 +8,7 @@ class Bomber(Plant):
         super().__init__(col, row, "bomber")
         self.hp = 200
         self.max_hp = 200
-        self.shoot_interval = 2.0
+        self.shoot_interval = 3.0
         self.cost = 200
 
     def shoot(self, game_state):
@@ -54,12 +54,6 @@ class Bomber(Plant):
                 b.total_time = t
                 b.target_x = target_x
                 b.target_y = target_y
-                b.splash_radius = 8 # Small splash? JS says radius=8, maybe just visual size?
-                # JS logic: bm.originRow = target.row;
-                # It seems it hits the target directly.
-                # Let's assume it hits single target or small area.
-                # JS doesn't show splash logic in shoot(), it's likely in Bullet update or collision.
-                # But wait, JS Bullet has `splash` property? No, `splash` was set for Watermelon.
-                # For Bomber, it seems to be single target hit per bullet.
+
                 
                 game_state.bullets.append(b)

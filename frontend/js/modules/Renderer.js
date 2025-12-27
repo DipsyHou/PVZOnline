@@ -16,6 +16,8 @@ export class Renderer {
         events.forEach(e => {
             if(e.kind === 'watermelon_splash'){
                 particleSystem.spawn(e.x, e.y, '#2e8b57', 15, {style: 'splash'});
+            } else if(e.kind === 'grape_splash'){
+                particleSystem.spawn(e.x, e.y, '#800080', 15, {style: 'splash'});
             } else if(e.kind === 'bomb_splash'){
                 particleSystem.spawn(e.x, e.y, '#c0392b', 15, {style: 'splash'});
             } else if(e.kind === 'jalapeno_explosion'){
@@ -309,6 +311,36 @@ export class Renderer {
             ctx.beginPath(); ctx.arc(x + radius, y + radius, radius, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle = '#fff'; ctx.font='10px Arial'; ctx.fillText('W', x, y+10);
         }
+        else if(kind === 'grape'){
+            // 一串葡萄（主弹）
+            ctx.save();
+            ctx.translate(x + radius, y + radius);
+            // 叶子
+            ctx.beginPath();
+            ctx.ellipse(10, -18, 10, 5, Math.PI/6, 0, 2*Math.PI);
+            ctx.fillStyle = '#43A047';
+            ctx.globalAlpha = 0.7;
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+            // 葡萄粒
+            ctx.beginPath(); ctx.arc(-8, 0, radius/2, 0, Math.PI*2); ctx.fillStyle = '#8E24AA'; ctx.fill();
+            ctx.beginPath(); ctx.arc(0, 0, radius/1.2, 0, Math.PI*2); ctx.fillStyle = '#7B1FA2'; ctx.fill();
+            ctx.beginPath(); ctx.arc(8, 0, radius/2, 0, Math.PI*2); ctx.fillStyle = '#8E24AA'; ctx.fill();
+            ctx.beginPath(); ctx.arc(0, 10, radius/2, 0, Math.PI*2); ctx.fillStyle = '#9C27B0'; ctx.fill();
+            // 高光
+            ctx.beginPath(); ctx.arc(-3, -3, 2, 0, Math.PI*2); ctx.fillStyle = '#fff'; ctx.globalAlpha = 0.4; ctx.fill();
+            ctx.globalAlpha = 1.0;
+            ctx.restore();
+        }
+        else if(kind === 'grape_small'){
+            // 单颗葡萄粒
+            ctx.save();
+            ctx.translate(x + radius, y + radius);
+            ctx.beginPath(); ctx.arc(0, 0, radius/2, 0, Math.PI*2); ctx.fillStyle = '#8E24AA'; ctx.shadowColor = '#512DA8'; ctx.shadowBlur = 3; ctx.fill();
+            ctx.beginPath(); ctx.arc(-1, -1, 1, 0, Math.PI*2); ctx.fillStyle = '#fff'; ctx.globalAlpha = 0.5; ctx.fill();
+            ctx.globalAlpha = 1.0;
+            ctx.restore();
+        }
         else if(kind === 'bomb'){
             ctx.fillStyle = '#c0392b';
             ctx.beginPath(); ctx.arc(x + radius, y + radius, radius, 0, Math.PI*2); ctx.fill();
@@ -416,6 +448,9 @@ export class Renderer {
             ctx.globalAlpha = 1.0;
             
             ctx.restore();
+        }
+        else if(kind === 'grape_spawner'){
+            // do nothting
         }
         else {
             // default pea etc

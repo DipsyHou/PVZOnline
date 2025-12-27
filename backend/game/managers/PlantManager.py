@@ -27,6 +27,7 @@ from game.objects.plants.jelly import Jelly
 from game.objects.plants.binary_tree import BinaryTree
 from game.objects.plants.maguey import Maguey
 from game.objects.plants.christmas_nut import ChristmasNut
+from game.objects.plants.grape_pult import GrapePult
 
 class PlantManager:
     def __init__(self, entity_manager):
@@ -34,6 +35,7 @@ class PlantManager:
         self.plant_info = {
             "peashooter": {"cost": 100, "cooldown": 7, "class": Peashooter},
             "sunflower": {"cost": 50, "cooldown": 7, "class": Sunflower},
+            "grape_pult": {"cost": 225, "cooldown": 7, "class": GrapePult},
             "pod_peashooter": {"cost": 225, "cooldown": 7, "class": PodPeashooter},
             "bomber": {"cost": 200, "cooldown": 7, "class": Bomber},
             "torchwood": {"cost": 175, "cooldown": 7, "class": Torchwood},
@@ -49,7 +51,7 @@ class PlantManager:
             "time_machine": {"cost": 125, "cooldown": 50, "class": TimeMachine},
             "laser_shroom": {"cost": 300, "cooldown": 15, "class": LaserShroom},
             "windmill": {"cost": 250, "cooldown": 30, "class": Windmill},
-            "vine_trap": {"cost": 225, "cooldown": 30, "class": VineTrap},
+            "vine_trap": {"cost": 125, "cooldown": 30, "class": VineTrap},
             "electrode_cherry": {"cost": 175, "cooldown": 15, "class": ElectrodeCherry},
             "wild_gatling": {"cost": 450, "cooldown": 30, "class": WildGatling},
             "ninja_nut": {"cost": 100, "cooldown": 30, "class": NinjaNut},

@@ -23,7 +23,7 @@ class Jelly(Plant):
                 continue
             
             # Ignore certain types
-            if b.kind in ["watermelon", "bomb", "citron_plasma"]:
+            if b.kind in ["watermelon", "bomb", "citron_plasma", "grape"]:
                 continue
                 
             # Check collision

@@ -50,7 +50,7 @@ class WildGatling(Plant):
         bx = self.x + 40
         by = self.y + 20
         speed = 360
-        angles = [-20, -10, 0, 10, 20]
+        angles = [-15,-5,5,15]
         
         for deg in angles:
             rad = math.radians(deg)
