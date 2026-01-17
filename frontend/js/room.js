@@ -37,6 +37,7 @@ try {
 }
 
 let myInventory = { plants: [], zombies: [] };
+let myPlantLevels = {};
 let selectedDeck = { plants: [], zombies: [] };
 
 // Expose functions to window IMMEDIATELY
@@ -91,7 +92,8 @@ window.confirmDeck = async function() {
 
         ws.send(JSON.stringify({
             type: 'set_deck',
-            deck: selectedDeck
+            deck: selectedDeck,
+            plant_levels: myPlantLevels
         }));
         // alert("卡组已保存！"); // Optional: remove alert for smoother UX
         window.closeDeckModal();
@@ -168,6 +170,7 @@ async function loadInventory() {
         const data = await res.json();
         if(data.status === 'success') {
             myInventory = data.inventory;
+            myPlantLevels = data.plant_levels || {};
             // Use saved deck if available
             if (data.deck) {
                 selectedDeck = data.deck;
@@ -179,7 +182,8 @@ async function loadInventory() {
             if(ws && ws.readyState === WebSocket.OPEN) {
                 ws.send(JSON.stringify({
                     type: 'set_deck',
-                    deck: selectedDeck
+                    deck: selectedDeck,
+                    plant_levels: myPlantLevels
                 }));
             }
             
@@ -192,11 +196,11 @@ async function loadInventory() {
 }
 
 function renderDeckSelection() {
-    renderSelectGrid('deck-plants', PLANT_CONFIGS, myInventory.plants, selectedDeck.plants, 'plants');
+    renderSelectGrid('deck-plants', PLANT_CONFIGS, myInventory.plants, selectedDeck.plants, 'plants', myPlantLevels);
     renderSelectGrid('deck-zombies', ZOMBIE_CONFIGS, myInventory.zombies, selectedDeck.zombies, 'zombies');
 }
 
-function renderSelectGrid(elementId, configs, ownedList, selectedList, type) {
+function renderSelectGrid(elementId, configs, ownedList, selectedList, type, levels = {}) {
     const container = document.getElementById(elementId);
     if(!container) return;
     container.innerHTML = '';
@@ -205,6 +209,7 @@ function renderSelectGrid(elementId, configs, ownedList, selectedList, type) {
         if(!configs[key]) return;
         const item = configs[key];
         const isSelected = selectedList.includes(key);
+        const level = levels[key] || 0;
         
         const div = document.createElement('div');
         div.className = `card ${isSelected ? 'owned' : ''}`;
@@ -221,10 +226,12 @@ function renderSelectGrid(elementId, configs, ownedList, selectedList, type) {
         div.style.margin = '2px';
         div.style.borderRadius = '5px';
         div.style.color = '#ecf0f1';
+        div.style.position = 'relative';
         
         div.innerHTML = `
             <img src="${item.img}" style="width:45px;height:45px;object-fit:contain; margin-bottom:5px;">
             <div style="font-size:10px; text-align:center;">${item.name}</div>
+            ${type === 'plants' ? `<div style="position:absolute; top:2px; right:2px; background:rgba(0,0,0,0.5); color:gold; padding:1px 3px; border-radius:3px; font-size:8px;">Lv.${level}</div>` : ''}
         `;
         
         div.onclick = () => toggleSelection(type, key);

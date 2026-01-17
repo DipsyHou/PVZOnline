@@ -2,13 +2,13 @@ from .base import Plant
 from ..bullet import Bullet
 from ...constants import CELL_W, CELL_H
 
-class Peashooter(Plant):
+class AcidLemon(Plant):
     def __init__(self, col, row):
-        super().__init__(col, row, "peashooter")
+        super().__init__(col, row, "acid_lemon")
         self.hp = 200
         self.max_hp = 200
-        self.shoot_interval = 1.5
-        self.cost = 100
+        self.shoot_interval = 2.0
+        self.cost = 125
 
     def shoot(self, game_state):
         # Check if any zombie in the same row and to the right
@@ -22,6 +22,9 @@ class Peashooter(Plant):
             # Spawn bullet
             bx = self.x + 40
             by = self.y + 20
-            damages = [20,22,24,26,28,30,33,36,39,42]
-            b = Bullet(bx, by, self.row, 360, 0, damages[self.level], "pea")
+            # Base damage is 25. Special damage is handled in BulletManager.
+            b = Bullet(bx, by, self.row, 360, 0, 25, "acid_juice")
+            # Flags for interactions
+            b.can_be_attracted = True # For Trumpet
+            b.can_be_reflected = True # For Jelly
             game_state.bullets.append(b)

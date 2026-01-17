@@ -59,6 +59,8 @@ export class Renderer {
                 particleSystem.spawn(e.x, e.y, '#ffffff', 10, {style: 'ring'});
             } else if(e.kind === 'dust'){
                 particleSystem.spawn(e.x, e.y, '#dddddd', 10, {style: 'smoke'});
+            } else if(e.kind === 'acid_corrosion'){
+                particleSystem.spawn(e.x, e.y, '#ffffff', 5, {style: 'smoke'});
             }
         });
     }
@@ -353,6 +355,30 @@ export class Renderer {
             ctx.shadowColor = ctx.fillStyle;
             ctx.beginPath(); ctx.arc(x + radius, y + radius, radius, 0, Math.PI*2); ctx.fill();
             ctx.shadowBlur = 0;
+        }
+        else if(kind === 'acid_juice'){
+            ctx.save();
+            ctx.translate(x + radius, y + radius);
+            
+            // Draw liquid drop shape
+            ctx.fillStyle = '#DFFF00'; // Acid yellow-green
+            ctx.shadowBlur = 5;
+            ctx.shadowColor = '#ADFF2F';
+            
+            ctx.beginPath();
+            // Teardrop shape
+            ctx.moveTo(0, -radius);
+            ctx.bezierCurveTo(radius, -radius, radius, radius, 0, radius);
+            ctx.bezierCurveTo(-radius, radius, -radius, -radius, 0, -radius);
+            ctx.fill();
+            
+            // Inner highlight
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.beginPath();
+            ctx.ellipse(-radius*0.3, -radius*0.3, radius*0.2, radius*0.4, Math.PI/4, 0, Math.PI*2);
+            ctx.fill();
+            
+            ctx.restore();
         }
         else if(kind === 'corn'){
             if(isFire){

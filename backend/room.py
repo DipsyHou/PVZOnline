@@ -104,6 +104,8 @@ class Room:
 
         if data['type'] == 'set_deck':
             deck = data.get('deck', {})
+            plant_levels = data.get('plant_levels', {})
+            deck['plant_levels'] = plant_levels
             self.player_decks[username] = deck
             return
 
@@ -145,7 +147,7 @@ class Room:
                 })
                 
                 # Initialize Game
-                self.game = Game(self.settings, self.roles)
+                self.game = Game(self.settings, self.roles, self.player_decks)
                 asyncio.ensure_future(self.game_loop())
                 
             elif data['type'] == 'update_settings' and username == self.host:

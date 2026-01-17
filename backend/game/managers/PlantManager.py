@@ -28,12 +28,14 @@ from game.objects.plants.binary_tree import BinaryTree
 from game.objects.plants.maguey import Maguey
 from game.objects.plants.christmas_nut import ChristmasNut
 from game.objects.plants.grape_pult import GrapePult
+from game.objects.plants.acid_lemon import AcidLemon
 
 class PlantManager:
     def __init__(self, entity_manager):
         self.em = entity_manager
         self.plant_info = {
             "peashooter": {"cost": 100, "cooldown": 7, "class": Peashooter},
+            "acid_lemon": {"cost": 125, "cooldown": 7, "class": AcidLemon},
             "sunflower": {"cost": 50, "cooldown": 7, "class": Sunflower},
             "grape_pult": {"cost": 225, "cooldown": 7, "class": GrapePult},
             "pod_peashooter": {"cost": 225, "cooldown": 7, "class": PodPeashooter},
@@ -118,6 +120,11 @@ class PlantManager:
 
             if can_place:
                 new_plant = info["class"](c, r)
+                if username and username in self.em.player_states:
+                    lvl_map = self.em.player_states[username].get('plant_levels', {})
+                    new_plant.level = int(lvl_map.get(plant_type, 0))
+                else:
+                    new_plant.level = 0
                 new_plant.owner = username # Set owner
                 
                 if plant_type == "mimic":

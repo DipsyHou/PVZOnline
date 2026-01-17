@@ -7,5 +7,5 @@ class BucketheadZombie(Zombie):
         self.max_hp = 200
         self.speed = 20
         self.damage = 50
-        self.armor = 1100
-        self.max_armor = 1100
+        self.armor = 1000
+        self.max_armor = 1000

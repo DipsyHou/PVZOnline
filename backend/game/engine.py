@@ -6,9 +6,9 @@ from game.managers.BulletManager import BulletManager
 from game.managers.WaveManager import WaveManager
 
 class Game:
-    def __init__(self, settings: dict, roles: dict):
+    def __init__(self, settings: dict, roles: dict, player_decks=None):
         self.em = EntityManager()
-        self.em.reset(settings, roles)
+        self.em.reset(settings, roles, player_decks)
         
         self.plant_manager = PlantManager(self.em)
         self.zombie_manager = ZombieManager(self.em)

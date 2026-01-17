@@ -96,7 +96,19 @@ class BulletManager:
                 if z.id in b.hit_set: continue
                 if hasattr(b, 'ignore_zombie_id') and b.ignore_zombie_id == z.id: continue
                 
-                z.take_damage(b.damage)
+                damage = b.damage
+                if b.kind == "acid_juice":
+                    if z.armor > 0 and z.type in ["buckethead", "football", "football_forward"]:
+                        damage = 75
+                        # Emit corrosion effect
+                        self.em.add_event({
+                            "type": "particle",
+                            "x": z.x + ZOMBIE_W/2,
+                            "y": z.y + ZOMBIE_H/2,
+                            "kind": "acid_corrosion"
+                        })
+
+                z.take_damage(damage)
                 b.hit_set.add(z.id)
 
                 # Splash for straight bullets (e.g. fire corn)

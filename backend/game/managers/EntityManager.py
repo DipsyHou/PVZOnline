@@ -12,7 +12,7 @@ class EntityManager:
         self.roles = {}
         self.settings = {}
 
-    def reset(self, settings, roles):
+    def reset(self, settings, roles, player_decks=None):
         self.settings = settings
         self.roles = roles
         self.plants = []
@@ -29,9 +29,13 @@ class EntityManager:
         self.player_states = {}
         for user, role in roles.items():
             if role == 'plant':
+                lvl_map = {}
+                if player_decks and user in player_decks:
+                    lvl_map = player_decks[user].get('plant_levels', {}) or {}
                 self.player_states[user] = {
                     'sun': 200,
-                    'cooldowns': {}
+                    'cooldowns': {},
+                    'plant_levels': lvl_map
                 }
         self.last_planted_type = None
 

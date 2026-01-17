@@ -109,9 +109,13 @@ export class UIManager {
     generatePlantCards() {
         this.plantSlotBar.innerHTML = '';
         const list = (this.deck && this.deck.plants) ? this.deck.plants : Object.keys(Config.PLANT_CONFIGS);
+        const levels = (this.deck && this.deck.plant_levels) ? this.deck.plant_levels : {};
+
         list.forEach(type => {
             const cfg = Config.PLANT_CONFIGS[type];
             if(!cfg) return;
+            const level = levels[type] || 0;
+
             const card = document.createElement('div');
             card.className = 'plant-card';
             card.id = `btn-${type}`;
@@ -121,6 +125,7 @@ export class UIManager {
                 <img src="${cfg.img}" class="plant-card-icon" alt="${cfg.name}">
                 <div class="name">${cfg.name}</div>
                 <div class="cost">${cfg.cost}</div>
+                <div class="level" style="position:absolute; top:2px; right:2px; color:gold; font-size:10px; text-shadow:1px 1px 1px black;">Lv.${level}</div>
                 <div class="cooldown-mask"></div>
             `;
             this.plantSlotBar.appendChild(card);

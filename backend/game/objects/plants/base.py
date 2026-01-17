@@ -16,6 +16,7 @@ class Plant(GameObject):
         self.hp = 200
         self.max_hp = 200
         self.pumpkin = None # Attached pumpkin
+        self.level = 0 # Evolution level (0-9)
 
     def update(self, dt, game_state):
         # Basic shoot timer logic

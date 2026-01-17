@@ -1,5 +1,6 @@
 export const PLANT_CONFIGS = {
     peashooter: { name: '豌豆', cost: 100, cooldown: 7, img: 'assets/png/peashooter.png' },
+    acid_lemon: { name: '强酸柠檬', cost: 125, cooldown: 7, img: 'assets/png/acid_lemon.png' },
     sunflower: { name: '向日葵', cost: 50, cooldown: 7, img: 'assets/png/sunflower.png' },
     grape_pult: { name: '葡萄投手', cost: 225, cooldown: 7, img: 'assets/svg/grape_pult.svg' },
     pod_peashooter: { name: '豆荚', cost: 225, cooldown: 7, img: 'assets/png/peasecod.png' },

@@ -36,7 +36,7 @@ def init_db():
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS users 
                  (username TEXT PRIMARY KEY, password TEXT, wins INTEGER DEFAULT 0, 
-                  inventory TEXT DEFAULT '[]', deck TEXT DEFAULT '[]')''')
+                  inventory TEXT DEFAULT '[]', deck TEXT DEFAULT '[]', plant_levels TEXT DEFAULT '{}')''')
     
     # Check if columns exist (for migration)
     c.execute("PRAGMA table_info(users)")
@@ -45,6 +45,8 @@ def init_db():
         c.execute("ALTER TABLE users ADD COLUMN inventory TEXT DEFAULT '[]'")
     if 'deck' not in columns:
         c.execute("ALTER TABLE users ADD COLUMN deck TEXT DEFAULT '[]'")
+    if 'plant_levels' not in columns:
+        c.execute("ALTER TABLE users ADD COLUMN plant_levels TEXT DEFAULT '{}'")
         
     conn.commit()
     conn.close()
@@ -63,6 +65,7 @@ class UserAuth(BaseModel):
 class DeckUpdate(BaseModel):
     username: str
     deck: Dict[str, List[str]]
+    plant_levels: Optional[Dict[str, int]] = None
 
 # --- 用户 API ---
 
@@ -85,8 +88,10 @@ def register(user: UserAuth):
             "zombies": DEFAULT_ZOMBIES
         }
         
-        c.execute("INSERT INTO users (username, password, inventory, deck) VALUES (?, ?, ?, ?)", 
-                  (user.username, pwd_hash, json.dumps(inventory), json.dumps(deck)))
+        # Initial plant levels (all 0)
+        plant_levels = {p: 0 for p in DEFAULT_PLANTS}
+        c.execute("INSERT INTO users (username, password, inventory, deck, plant_levels) VALUES (?, ?, ?, ?, ?)", 
+              (user.username, pwd_hash, json.dumps(inventory), json.dumps(deck), json.dumps(plant_levels)))
         conn.commit()
         return {"status": "success", "message": "注册成功"}
     except sqlite3.IntegrityError:
@@ -98,7 +103,7 @@ def register(user: UserAuth):
 def get_inventory(username: str):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("SELECT inventory, deck FROM users WHERE username=?", (username,))
+    c.execute("SELECT inventory, deck, plant_levels FROM users WHERE username=?", (username,))
     result = c.fetchone()
     conn.close()
     
@@ -106,7 +111,8 @@ def get_inventory(username: str):
         return {
             "status": "success", 
             "inventory": json.loads(result[0]), 
-            "deck": json.loads(result[1])
+            "deck": json.loads(result[1]),
+            "plant_levels": json.loads(result[2]) if len(result) > 2 else {}
         }
     else:
         raise HTTPException(status_code=404, detail="User not found")
@@ -117,7 +123,7 @@ def update_deck(data: DeckUpdate):
     c = conn.cursor()
     
     # Get current deck (check if user exists)
-    c.execute("SELECT deck FROM users WHERE username=?", (data.username,))
+    c.execute("SELECT deck, plant_levels FROM users WHERE username=?", (data.username,))
     result = c.fetchone()
     if not result:
         conn.close()
@@ -125,6 +131,8 @@ def update_deck(data: DeckUpdate):
         
     # Update deck directly
     c.execute("UPDATE users SET deck=? WHERE username=?", (json.dumps(data.deck), data.username))
+    if data.plant_levels is not None:
+        c.execute("UPDATE users SET plant_levels=? WHERE username=?", (json.dumps(data.plant_levels), data.username))
     conn.commit()
     conn.close()
     return {"status": "success"}
