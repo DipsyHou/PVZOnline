@@ -395,6 +395,48 @@ export class Renderer {
                 ctx.beginPath(); ctx.arc(x + radius, y + radius, 5, 0, Math.PI*2); ctx.fill();
             }
         }
+        else if(kind === 'flying_sword'){
+            // 飞剑渲染
+            ctx.save();
+            ctx.translate(x + radius, y + radius);
+            
+            // 计算剑的旋转角度（根据速度方向）
+            const angle = Math.atan2(b.vy || 0, b.vx || 1);
+            ctx.rotate(angle);
+            
+            // 剑身
+            ctx.fillStyle = '#C0C0C0';
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = '#FF3366';
+            ctx.beginPath();
+            ctx.moveTo(-15, 0);
+            ctx.lineTo(15, -3);
+            ctx.lineTo(20, 0);
+            ctx.lineTo(15, 3);
+            ctx.closePath();
+            ctx.fill();
+            
+            // 剑刃光芒
+            ctx.fillStyle = '#FFFFFF';
+            ctx.globalAlpha = 0.7;
+            ctx.beginPath();
+            ctx.moveTo(-10, 0);
+            ctx.lineTo(18, -1);
+            ctx.lineTo(18, 1);
+            ctx.closePath();
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+            
+            // 剑柄
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(-20, -2, 5, 4);
+            
+            // 护手
+            ctx.fillStyle = '#DAA520';
+            ctx.fillRect(-16, -4, 2, 8);
+            
+            ctx.restore();
+        }
         else if(kind === 'butter'){
             ctx.fillStyle = '#FFEB3B';
             ctx.fillRect(x, y, 16, 12);
@@ -540,6 +582,25 @@ export class Renderer {
 
             ctx.fillStyle = c;
             ctx.fillRect(x+1, y+1, Math.max(0, (barW-2) * ratio), barH-2);
+        }
+
+        // Corn Gatling Attack Speed Bar
+        if(p.type === 'corn_gatling' && p.shoot_interval !== undefined){
+            const barW = Config.PLANT_W - 16;
+            const x = p.x + 8;
+            const y = p.y + Config.PLANT_H + 2;
+            const barH = 6;
+            // Use actual values from backend (accounts for coffee bean boost)
+            const baseInterval = p.base_interval || 2.0;
+            const minInterval = p.min_interval || 0.4;
+            // Invert ratio: faster = fuller bar
+            const ratio = 1 - ((p.shoot_interval - minInterval) / (baseInterval - minInterval));
+            
+            ctx.fillStyle = 'rgba(0,0,0,0.5)';
+            ctx.fillRect(x, y, barW, barH);
+
+            ctx.fillStyle = '#FFD700';
+            ctx.fillRect(x+1, y+1, Math.max(0, (barW-2) * Math.max(0, Math.min(1, ratio))), barH-2);
         }
 
         // Laser Shroom

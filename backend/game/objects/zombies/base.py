@@ -1,5 +1,5 @@
 from ..base import GameObject
-from ...constants import SCREEN_WIDTH, CELL_H, ZOMBIE_W, ZOMBIE_H, PLANT_W, PLANT_H, CELL_W
+from ...config import SCREEN_WIDTH, CELL_H, ZOMBIE_W, ZOMBIE_H, PLANT_W, PLANT_H, CELL_W
 
 class Zombie(GameObject):
     def __init__(self, row, type_name):

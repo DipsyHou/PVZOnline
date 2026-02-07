@@ -1,5 +1,5 @@
 from .base import Zombie
-from ...constants import PLANT_W
+from ...config import PLANT_W
 
 class FootballZombie(Zombie):
     def __init__(self, row):

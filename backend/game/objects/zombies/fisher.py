@@ -1,11 +1,11 @@
 from .base import Zombie
-from ...constants import PLANT_W, CELL_W, COLS
+from ...config import PLANT_W, CELL_W, COLS
 
 class FisherZombie(Zombie):
     def __init__(self, row):
         super().__init__(row, "fisher")
-        self.hp = 200
-        self.max_hp = 200
+        self.hp = 400
+        self.max_hp = 400
         self.speed = 20
         self.damage = 50
         

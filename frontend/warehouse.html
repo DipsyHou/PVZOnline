@@ -17,6 +17,42 @@
         <h3>僵尸</h3>
         <div id="zombie-grid" class="card-grid"></div>
     </div>
+
+    <!-- 详情弹窗 -->
+    <div id="detail-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeDetailModal()">&times;</span>
+            <h2 id="modal-name"></h2>
+            <div class="modal-body">
+                <div class="modal-left">
+                    <img id="modal-img" src="" alt="">
+                </div>
+                <div class="modal-right">
+                    <div class="stat-item">
+                        <span class="stat-label">花费：</span>
+                        <span id="modal-cost"></span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">冷却时间：</span>
+                        <span id="modal-cooldown"></span>
+                    </div>
+                    <div class="stat-item" id="modal-hp-container" style="display:none;">
+                        <span class="stat-label">生命值：</span>
+                        <span id="modal-hp"></span>
+                    </div>
+                    <div class="stat-item" id="modal-category-container" style="display:none;">
+                        <span class="stat-label">类别：</span>
+                        <span id="modal-category"></span>
+                    </div>
+                    <div class="stat-item" id="modal-desc-container">
+                        <span class="stat-label">描述：</span>
+                        <p id="modal-desc"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="js/warehouse.js"></script>
 </body>
 </html>

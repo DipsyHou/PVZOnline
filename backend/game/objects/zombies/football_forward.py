@@ -1,6 +1,6 @@
 import random
 from .base import Zombie
-from ...constants import PLANT_W, CELL_H, ROWS, CELL_W
+from ...config import PLANT_W, CELL_H, ROWS, CELL_W
 
 class FootballForwardZombie(Zombie):
     def __init__(self, row):

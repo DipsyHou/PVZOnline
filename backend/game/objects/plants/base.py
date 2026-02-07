@@ -1,6 +1,6 @@
 import time
 from ..base import GameObject
-from ...constants import CELL_W, CELL_H, PLANT_W, PLANT_H
+from ...config import CELL_W, CELL_H, PLANT_W, PLANT_H
 
 class Plant(GameObject):
     def __init__(self, col, row, type_name):

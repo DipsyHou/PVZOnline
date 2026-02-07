@@ -1,12 +1,12 @@
 from .base import Plant
-from ...constants import CELL_W, CELL_H
+from ...config import CELL_W, CELL_H
 
 class ChristmasNut(Plant):
     def __init__(self, col, row):
         super().__init__(col, row, "christmas_nut")
         self.hp = 2000
         self.max_hp = 2000
-        self.shoot_interval = float('inf')
+        self.shoot_interval = 0
         self.cost = 50
         
     def on_death(self, game_state):

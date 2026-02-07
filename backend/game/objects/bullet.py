@@ -1,6 +1,6 @@
 import math
 from .base import GameObject
-from ..constants import BULLET_W, BULLET_H
+from ..config import BULLET_W, BULLET_H
 
 class Bullet(GameObject):
     def __init__(self, x, y, row, vx, vy, damage, kind="pea"):

@@ -1,5 +1,5 @@
 from .base import Zombie
-from ...constants import PLANT_W, CELL_W, CELL_H, ROWS, COLS
+from ...config import PLANT_W, CELL_W, CELL_H, ROWS, COLS
 
 class ExploderZombie(Zombie):
     def __init__(self, row):

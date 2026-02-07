@@ -1,5 +1,5 @@
 from .base import Plant
-from ...constants import CELL_W, CELL_H, COLS
+from ...config import CELL_W, CELL_H, COLS
 
 class IcedCoconut(Plant):
     def __init__(self, col, row):

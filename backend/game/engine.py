@@ -34,6 +34,8 @@ class Game:
                 self.plant_manager.handle_activate_plant(data)
             elif data['type'] == 'shovel':
                 self.plant_manager.handle_shovel(data)
+            elif data['type'] == 'mouse_position':
+                self.plant_manager.handle_mouse_position(data)
         elif role == "zombie":
             if data['type'] == 'spawn_zombie':
                 self.zombie_manager.handle_spawn_zombie(data)
@@ -72,11 +74,9 @@ class Game:
                 "hp": int(p.hp), "max_hp": p.max_hp
             }
             if hasattr(p, 'shoot_timer'): data['shoot_timer'] = p.shoot_timer
-            if hasattr(p, 'shoot_interval'): 
-                if p.shoot_interval == float('inf'):
-                    data['shoot_interval'] = 0
-                else:
-                    data['shoot_interval'] = p.shoot_interval
+            if hasattr(p, 'shoot_interval'): data['shoot_interval'] = p.shoot_interval
+            if hasattr(p, 'base_interval'): data['base_interval'] = p.base_interval
+            if hasattr(p, 'min_interval'): data['min_interval'] = p.min_interval
             if hasattr(p, 'life_timer'): data['life_timer'] = p.life_timer
             if hasattr(p, 'mimic_timer'): data['mimic_timer'] = p.mimic_timer
             if hasattr(p, 'float_timer'): data['float_timer'] = p.float_timer
@@ -100,6 +100,22 @@ class Game:
             if hasattr(z, 'heal_target_id'): z_data['heal_target_id'] = z.heal_target_id
             zombie_data.append(z_data)
 
+        bullet_data = []
+        for b in self.em.bullets:
+            data = {
+                "id": b.id,
+                "x": int(b.x),
+                "y": int(b.y),
+                "w": b.w,
+                "h": b.h,
+                "type": b.type
+            }
+            if hasattr(b, 'is_fire'): data['is_fire'] = b.is_fire
+            if hasattr(b, 'angle'): data['angle'] = b.angle
+            if hasattr(b, 'vx'): data['vx'] = b.vx
+            if hasattr(b, 'vy'): data['vy'] = b.vy
+            bullet_data.append(data)
+
         return {
             "type": "game_state",
             "sun": self.em.sun,
@@ -107,7 +123,7 @@ class Game:
             "player_states": self.em.get_processed_player_states(now),
             "plants": plant_data,
             "zombies": zombie_data,
-            "bullets": [{"id": b.id, "x": int(b.x), "y": int(b.y), "w": b.w, "h": b.h, "type": b.type, "is_fire": getattr(b, 'is_fire', False), "angle": getattr(b, 'angle', 0)} for b in self.em.bullets],
+            "bullets": bullet_data,
             "roles": self.em.roles,
             "cooldowns": remaining_cooldowns,
             "events": self.em.events

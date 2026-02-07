@@ -1,13 +1,13 @@
 from .base import Plant
 from ..bullet import Bullet
-from ...constants import CELL_W, CELL_H
+from ...config import CELL_W, CELL_H
 
 class Jelly(Plant):
     def __init__(self, col, row):
         super().__init__(col, row, "jelly")
         self.hp = 500
         self.max_hp = 500
-        self.shoot_interval = float('inf')
+        self.shoot_interval = 0
         self.cost = 125
 
     def update(self, dt, game_state):

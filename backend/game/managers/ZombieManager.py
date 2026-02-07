@@ -1,33 +1,28 @@
 import time
-from game.objects.zombies.normal import NormalZombie
-from game.objects.zombies.buckethead import BucketheadZombie
-from game.objects.zombies.exploder import ExploderZombie
-from game.objects.zombies.fisher import FisherZombie
-from game.objects.zombies.football import FootballZombie
-from game.objects.zombies.football_forward import FootballForwardZombie
-from game.objects.zombies.gargantuar import GargantuarZombie
-from game.objects.zombies.priest import PriestZombie
+from typing import Dict, Optional
+from game.factories import ZombieFactory
+from game.config import ZOMBIE_CONFIGS, INITIAL_BRAINS, BRAIN_BASE_RATE, BRAIN_GROWTH_FACTOR
 
 class ZombieManager:
+    """僵尸管理器 - 使用工厂模式动态加载僵尸"""
+    
     def __init__(self, entity_manager):
         self.em = entity_manager
-        self.zombie_info = {
-            "normal": {"cost": 50, "cooldown": 1, "class": NormalZombie},
-            "buckethead": {"cost": 200, "cooldown": 1, "class": BucketheadZombie},
-            "exploder": {"cost": 150, "cooldown": 1, "class": ExploderZombie},
-            "fisher": {"cost": 200, "cooldown": 1, "class": FisherZombie},
-            "football": {"cost": 400, "cooldown": 1, "class": FootballZombie},
-            "football_forward": {"cost": 600, "cooldown": 1, "class": FootballForwardZombie},
-            "gargantuar": {"cost": 900, "cooldown": 1, "class": GargantuarZombie},
-            "priest": {"cost": 200, "cooldown": 1, "class": PriestZombie},
-        }
+        self.zombie_info = ZOMBIE_CONFIGS
 
-    def handle_spawn_zombie(self, data):
+    def handle_spawn_zombie(self, data: Dict) -> None:
+        """
+        处理生成僵尸请求
+        
+        Args:
+            data: 包含row, zombie_type的字典
+        """
         r = data['row']
         z_type = data.get('zombie_type', 'normal')
         
         info = self.zombie_info.get(z_type)
-        if not info: return
+        if not info: 
+            return
 
         cost = info["cost"]
         cooldown = info["cooldown"]
@@ -37,20 +32,38 @@ class ZombieManager:
             return
 
         if self.em.brains >= cost:
-            self.em.zombies.append(info["class"](r))
-            self.em.brains -= cost
-            self.em.zombie_cooldowns[z_type] = now + cooldown
+            # 使用工厂模式创建僵尸
+            new_zombie = ZombieFactory.create_zombie(z_type, r)
+            if new_zombie:
+                self.em.zombies.append(new_zombie)
+                self.em.brains -= cost
+                self.em.zombie_cooldowns[z_type] = now + cooldown
 
-    def spawn_zombie(self, row, z_type):
-        info = self.zombie_info.get(z_type)
-        if info:
-            self.em.zombies.append(info["class"](row))
+    def spawn_zombie(self, row: int, z_type: str) -> None:
+        """
+        直接生成僵尸（用于波次系统）
+        
+        Args:
+            row: 行位置
+            z_type: 僵尸类型
+        """
+        new_zombie = ZombieFactory.create_zombie(z_type, row)
+        if new_zombie:
+            self.em.zombies.append(new_zombie)
 
-    def update(self, now, dt, start_time):
-        # Brain generation
+    def update(self, now: float, dt: float, start_time: float) -> None:
+        """
+        更新所有僵尸
+        
+        Args:
+            now: 当前时间戳
+            dt: 时间增量
+            start_time: 游戏开始时间
+        """
+        # Brain generation - 使用配置常量
         elapsed_minutes = (now - start_time) / 60
         if elapsed_minutes > 0:
-            brain_rate = 10 * elapsed_minutes * (1 + elapsed_minutes / 4)
+            brain_rate = BRAIN_BASE_RATE * elapsed_minutes * (1 + elapsed_minutes / BRAIN_GROWTH_FACTOR)
             self.em.brains += brain_rate * dt
 
         for z in self.em.zombies:

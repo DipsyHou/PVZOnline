@@ -1,6 +1,6 @@
 from .base import Plant
 from ..bullet import Bullet
-from ...constants import CELL_W, CELL_H
+from ...config import CELL_W, CELL_H
 
 class Peashooter(Plant):
     def __init__(self, col, row):

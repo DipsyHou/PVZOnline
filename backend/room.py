@@ -1,10 +1,17 @@
 import uuid
 import asyncio
 import time
+import logging
 from typing import Dict, Optional, List
 from fastapi import WebSocket
 from game.engine import Game
-from game.constants import CELL_W, CELL_H, ROWS, COLS, SCREEN_WIDTH, SCREEN_HEIGHT, PLANT_W, PLANT_H, ZOMBIE_W, ZOMBIE_H, BULLET_W, BULLET_H
+from game.config import (
+    CELL_W, CELL_H, ROWS, COLS, SCREEN_WIDTH, SCREEN_HEIGHT,
+    PLANT_W, PLANT_H, ZOMBIE_W, ZOMBIE_H, BULLET_W, BULLET_H,
+    ROOM_EMPTY_TIMEOUT, ROOM_RECONNECT_BUFFER
+)
+
+logger = logging.getLogger(__name__)
 
 class Room:
     def __init__(self, room_id):
@@ -159,7 +166,8 @@ class Room:
             self.game.handle_command(username, data)
 
     async def game_loop(self):
-        print(f"Room {self.room_id} game started")
+        """游戏主循环"""
+        logger.info(f"Room {self.room_id} game started")
         tps = int(self.settings.get('tps', 30))
         sleep_time = 1.0 / tps
 
@@ -168,8 +176,8 @@ class Room:
             if not self.players:
                 if empty_start_time == 0:
                     empty_start_time = time.time()
-                elif time.time() - empty_start_time > 30: # 30 seconds timeout
-                    print(f"Room {self.room_id} stopped (timeout)")
+                elif time.time() - empty_start_time > ROOM_EMPTY_TIMEOUT:  # 使用配置常量
+                    logger.info(f"Room {self.room_id} stopped (timeout after {ROOM_EMPTY_TIMEOUT}s)")
                     self.running = False
                     break
             else:
@@ -177,9 +185,12 @@ class Room:
 
             # Update Game State
             if self.game:
-                self.game.update()
-                state = self.game.get_state()
-                await self.broadcast(state)
+                try:
+                    self.game.update()
+                    state = self.game.get_state()
+                    await self.broadcast(state)
+                except Exception as e:
+                    logger.error(f"Game update error in room {self.room_id}: {e}")
 
             await asyncio.sleep(sleep_time)
 

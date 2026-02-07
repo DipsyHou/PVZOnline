@@ -1,5 +1,5 @@
 from .base import Plant
-from ...constants import CELL_W, CELL_H, ROWS, COLS
+from ...config import CELL_W, CELL_H, ROWS, COLS
 
 class JalapenoPair(Plant):
     def __init__(self, col, row):

@@ -1,6 +1,6 @@
 import time
 import random
-from game.constants import ROWS
+from game.config import ROWS
 
 class WaveManager:
     def __init__(self, zombie_manager, entity_manager):

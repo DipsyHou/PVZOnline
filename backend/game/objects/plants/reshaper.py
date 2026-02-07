@@ -12,7 +12,7 @@ class Reshaper(Plant):
     def update(self, dt, game_state):
         # Instant effect then die
         self.life_timer += dt
-        if self.life_timer > 0.1:
+        if self.life_timer > 3.0:
             self.active = False
             
             # Find target plant at this location (excluding self)

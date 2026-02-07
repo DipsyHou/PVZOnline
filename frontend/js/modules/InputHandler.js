@@ -28,6 +28,11 @@ export class InputHandler {
         
         const relY = y % Config.CELL_H;
         this.isBottom = relY > (Config.CELL_H / 2);
+        
+        // 发送鼠标位置给后端（用于养剑葫等植物）
+        if(this.gameState.myRole === 'plant') {
+            this.network.sendMousePosition(this.hoverCol, this.hoverRow, x, y);
+        }
     }
 
     handleClick(e) {

@@ -72,6 +72,18 @@ export class Network {
         }
     }
 
+    sendMousePosition(col, row, mouse_x, mouse_y) {
+        if(this.ws && this.ws.readyState === WebSocket.OPEN) {
+            this.ws.send(JSON.stringify({
+                type: 'mouse_position',
+                col: col,
+                row: row,
+                mouse_x: mouse_x,
+                mouse_y: mouse_y
+            }));
+        }
+    }
+
     close() {
         if(this.ws) this.ws.close();
     }

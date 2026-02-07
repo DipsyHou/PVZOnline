@@ -1,7 +1,7 @@
 import math
 from .base import Plant
 from ..bullet import Bullet
-from ...constants import CELL_W, CELL_H, ROWS
+from ...config import CELL_W, CELL_H, ROWS
 
 class Bomber(Plant):
     def __init__(self, col, row):

@@ -1,13 +1,25 @@
-from game.constants import SCREEN_WIDTH, SCREEN_HEIGHT, ZOMBIE_W, ZOMBIE_H, CELL_W, CELL_H, ROWS, COLS
+from typing import Any
+from game.config import (
+    SCREEN_WIDTH, SCREEN_HEIGHT, ZOMBIE_W, ZOMBIE_H, CELL_W, CELL_H, ROWS, COLS,
+    FIRE_DAMAGE_MULTIPLIER, CORN_FIRE_DAMAGE, CORN_FIRE_SPLASH_RADIUS, CORN_FIRE_SPLASH_DAMAGE
+)
 from game.objects.bullet import Bullet
 import random
 import math
 
 class BulletManager:
+    """子弹管理器 - 处理子弹移动和碰撞检测"""
+    
     def __init__(self, entity_manager):
         self.em = entity_manager
 
-    def update(self, dt):
+    def update(self, dt: float) -> None:
+        """
+        更新所有子弹
+        
+        Args:
+            dt: 时间增量
+        """
         # Iterate over a copy of the list to avoid issues with appending during iteration
         for b in self.em.bullets[:]:
             self.update_bullet_position(b, dt)
@@ -15,6 +27,21 @@ class BulletManager:
             if self.is_out_of_bounds(b):
                 b.active = False
                 continue
+
+            # 飞剑特殊逻辑：检查生命时间和清空hit_set
+            if hasattr(b, 'is_sword') and b.is_sword:
+                if hasattr(b, 'life_time'):
+                    b.life_time += dt
+                    # 10秒后开始返回葫芦
+                    if b.life_time >= b.max_life_time and not getattr(b, 'is_returning', False):
+                        b.is_returning = True
+                
+                # 每1秒清空hit_set以重复伤害
+                if hasattr(b, 'hit_set_clear_timer'):
+                    b.hit_set_clear_timer += dt
+                    if b.hit_set_clear_timer >= 1.0:
+                        b.hit_set.clear()
+                        b.hit_set_clear_timer = 0
 
             if hasattr(b, 'max_distance') and b.max_distance > 0:
                 dist = ((b.x - b.start_x)**2 + (b.y - b.start_y)**2)**0.5
@@ -34,11 +61,80 @@ class BulletManager:
         # Cleanup dead bullets
         self.em.bullets = [b for b in self.em.bullets if b.active]
 
-    def update_bullet_position(self, b, dt):
+    def update_bullet_position(self, b: Any, dt: float) -> None:
+        """
+        更新子弹位置
+        
+        Args:
+            b: 子弹对象
+            dt: 时间增量
+        """
         b.elapsed += dt
 
-        # Homing Logic
-        if b.homing and b.target and b.target.hp > 0:
+        # 飞剑追踪逻辑
+        if hasattr(b, 'is_sword') and b.is_sword and hasattr(b, 'plant_id'):
+            # 查找对应的植物
+            plant = next((p for p in self.em.plants if p.id == b.plant_id), None)
+            
+            # 如果植物消失，飞剑也消失
+            if not plant:
+                b.active = False
+                return
+            
+            # 判断是否正在返回
+            is_returning = getattr(b, 'is_returning', False)
+            
+            if is_returning:
+                # 返回葫芦：追踪植物位置
+                tx = plant.x + plant.w / 2
+                ty = plant.y + plant.h / 2
+                dx = tx - b.x
+                dy = ty - b.y
+                dist = math.sqrt(dx*dx + dy*dy)
+                
+                # 到达葫芦附近时消失
+                if dist < 30:
+                    b.active = False
+                    return
+                
+                # 加速返回
+                speed = math.sqrt(b.vx**2 + b.vy**2)
+                turn_rate = 8 * dt  # 返回时转向更快
+                
+                current_angle = math.atan2(b.vy, b.vx)
+                target_angle = math.atan2(dy, dx)
+                
+                diff = target_angle - current_angle
+                while diff < -math.pi: diff += math.pi * 2
+                while diff > math.pi: diff -= math.pi * 2
+                
+                new_angle = current_angle + max(-turn_rate, min(turn_rate, diff))
+                b.vx = math.cos(new_angle) * speed
+                b.vy = math.sin(new_angle) * speed
+            else:
+                # 正常飞行：追踪鼠标位置
+                if hasattr(plant, 'target_x') and plant.target_x is not None:
+                    tx = plant.target_x
+                    ty = plant.target_y
+                    dx = tx - b.x
+                    dy = ty - b.y
+                    dist = math.sqrt(dx*dx + dy*dy)
+                    if dist > 10:  # 距离目标点超过10像素才追踪
+                        speed = math.sqrt(b.vx**2 + b.vy**2)
+                        turn_rate = 4 * dt  # 飞剑转向速度随机变化
+                        
+                        current_angle = math.atan2(b.vy, b.vx)
+                        target_angle = math.atan2(dy, dx)
+                        
+                        diff = target_angle - current_angle
+                        while diff < -math.pi: diff += math.pi * 2
+                        while diff > math.pi: diff -= math.pi * 2
+                        
+                        new_angle = current_angle + max(-turn_rate, min(turn_rate, diff))
+                        b.vx = math.cos(new_angle) * speed
+                        b.vy = math.sin(new_angle) * speed
+        # Homing Logic (追踪僵尸)
+        elif b.homing and b.target and b.target.hp > 0:
             tx = b.target.x + b.target.w / 2
             ty = b.target.y + b.target.h / 2
             dx = tx - b.x
@@ -70,11 +166,13 @@ class BulletManager:
             b.x += b.vx * dt
             b.y += b.vy * dt
 
-    def is_out_of_bounds(self, b):
+    def is_out_of_bounds(self, b: Any) -> bool:
+        """检查子弹是否超出边界"""
         return b.x > SCREEN_WIDTH or b.x < -100 or b.y > SCREEN_HEIGHT or b.y < -1000
 
-    def handle_straight_collision(self, b):
-        # Torchwood Interaction
+    def handle_straight_collision(self, b: Any) -> None:
+        """处理直线子弹碰撞"""
+        # Torchwood Interaction - 使用配置常量
         if b.is_passable_through_fire and not b.is_fire:
             c = int(b.x / CELL_W)
             r = int(b.y / CELL_H)
@@ -83,11 +181,11 @@ class BulletManager:
                     if p.col == c and p.row == r and p.type == "torchwood":
                         b.is_fire = True
                         if b.kind == "corn":
-                            b.damage = 40
-                            b.splash_radius = 100
-                            b.splash_damage = 40
+                            b.damage = CORN_FIRE_DAMAGE
+                            b.splash_radius = CORN_FIRE_SPLASH_RADIUS
+                            b.splash_damage = CORN_FIRE_SPLASH_DAMAGE
                         else:
-                            b.damage *= 2
+                            b.damage *= FIRE_DAMAGE_MULTIPLIER
                         break
 
         # Zombie Collision
@@ -119,11 +217,14 @@ class BulletManager:
                 self.apply_status_effects(b, z)
                 self.handle_special_on_hit(b)
 
-                if b.pierce <= 0:
-                    b.active = False
-                    break
-                else:
-                    b.pierce -= 1
+                # 飞剑特殊逻辑：击中后不消失
+                is_sword = hasattr(b, 'is_sword') and b.is_sword
+                if not is_sword:
+                    if b.pierce <= 0:
+                        b.active = False
+                        break
+                    else:
+                        b.pierce -= 1
 
     def handle_lobbed_collision(self, b):
         if b.total_time and b.elapsed >= b.total_time:

@@ -5,7 +5,7 @@ class NinjaNut(Plant):
         super().__init__(col, row, "ninja_nut")
         self.hp = 2000
         self.max_hp = 2000
-        self.shoot_interval = float('inf')
+        self.shoot_interval = 0
         self.cost = 100
         self.has_spawned_extras = False
 

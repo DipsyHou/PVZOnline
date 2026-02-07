@@ -1,11 +1,11 @@
 from .base import Zombie
-from ...constants import PLANT_W, CELL_W
+from ...config import PLANT_W, CELL_W
 
 class PriestZombie(Zombie):
     def __init__(self, row):
         super().__init__(row, "priest")
-        self.hp = 200
-        self.max_hp = 200
+        self.hp = 600
+        self.max_hp = 600
         self.speed = 20
         self.damage = 50
         

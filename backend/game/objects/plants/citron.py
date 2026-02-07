@@ -6,7 +6,7 @@ class Citron(Plant):
         super().__init__(col, row, "citron")
         self.hp = 200
         self.max_hp = 200
-        self.shoot_interval = float('inf')
+        self.shoot_interval = 0
         self.cost = 200
         self.charge_time = 0
         self.max_charge = 20.0

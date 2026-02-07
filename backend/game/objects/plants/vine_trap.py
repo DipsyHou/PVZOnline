@@ -1,5 +1,5 @@
 from .base import Plant
-from ...constants import CELL_W, CELL_H
+from ...config import CELL_W, CELL_H
 
 class VineTrap(Plant):
     def __init__(self, col, row):

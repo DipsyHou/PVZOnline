@@ -5,7 +5,7 @@ class Windmill(Plant):
         super().__init__(col, row, "windmill")
         self.hp = 200
         self.max_hp = 200
-        self.shoot_interval = float('inf')
+        self.shoot_interval = 0
         self.cost = 250
 
     def update(self, dt, game_state):
