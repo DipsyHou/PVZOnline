@@ -49,7 +49,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           # 自动生成标签：
           # - 如果是分支 push，生成 branch 名称 (e.g., main)
           # - 如果是 tag push，生成 tag 名称 (e.g., v1.0.0)
