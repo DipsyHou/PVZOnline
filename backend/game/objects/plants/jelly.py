@@ -35,3 +35,5 @@ class Jelly(Plant):
                 if b.homing:
                     b.homing = False
                     b.target = None
+
+        super().update(dt, game_state)

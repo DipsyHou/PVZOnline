@@ -7,6 +7,3 @@ class Windmill(Plant):
         self.max_hp = 200
         self.shoot_interval = 0
         self.cost = 250
-
-    def update(self, dt, game_state):
-        pass

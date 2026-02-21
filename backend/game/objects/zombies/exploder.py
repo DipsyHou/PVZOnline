@@ -29,7 +29,9 @@ class ExploderZombie(Zombie):
         for p in game_state.plants:
             if p.row == self.row and p.active:
                 if self.x < p.x + p.w and self.x + self.w > p.x:
-                    if p.type in ["time_machine", "reshaper", "iced_coconut"]:
+                    # Ignore floating plants
+                    from ...config import get_plant_category
+                    if get_plant_category(p.type) == "floating":
                         continue
                     targets.append(p)
         

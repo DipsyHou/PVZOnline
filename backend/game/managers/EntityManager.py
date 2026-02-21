@@ -49,7 +49,8 @@ class EntityManager:
                 self.player_states[user] = {
                     'sun': INITIAL_SUN,
                     'cooldowns': {},
-                    'plant_levels': lvl_map
+                    'plant_levels': lvl_map,
+                    'last_planted_type': None  # 记录每个玩家上一次放置的植物
                 }
 
     def add_event(self, event: Dict[str, Any]) -> None:

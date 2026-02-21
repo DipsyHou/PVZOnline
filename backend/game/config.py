@@ -44,12 +44,12 @@ PLANT_CONFIGS = {
     "bomber": {"cost": 200, "cooldown": 7, "category": "normal"},
     "torchwood": {"cost": 175, "cooldown": 7, "category": "normal"},
     "watermelon": {"cost": 300, "cooldown": 7, "category": "normal"},
-    "iced_coconut": {"cost": 175, "cooldown": 30, "category": "floating"},
+    "iced_coconut": {"cost": 175, "cooldown": 50, "category": "floating"},
     "trumpet": {"cost": 50, "cooldown": 30, "category": "normal"},
     "pine_shooter": {"cost": 150, "cooldown": 7, "category": "normal"},
     "gold_bloom": {"cost": 150, "cooldown": 50, "category": "normal"},
-    "spiky_pumpkin": {"cost": 150, "cooldown": 30, "category": "carrier"},
-    "jalapeno_pair": {"cost": 225, "cooldown": 30, "category": "normal"},
+    "spiky_pumpkin": {"cost": 150, "cooldown": 50, "category": "carrier"},
+    "jalapeno_pair": {"cost": 225, "cooldown": 50, "category": "normal"},
     "mimic": {"cost": 325, "cooldown": 30, "category": "normal"},
     "reshaper": {"cost": 50, "cooldown": 30, "category": "floating"},
     "time_machine": {"cost": 125, "cooldown": 50, "category": "floating"},
@@ -58,16 +58,17 @@ PLANT_CONFIGS = {
     "vine_trap": {"cost": 125, "cooldown": 30, "category": "normal"},
     "electrode_cherry": {"cost": 175, "cooldown": 15, "category": "normal"},
     "wild_gatling": {"cost": 450, "cooldown": 30, "category": "normal"},
-    "ninja_nut": {"cost": 100, "cooldown": 30, "category": "normal"},
+    "ninja_nut": {"cost": 100, "cooldown": 50, "category": "normal"},
     "citron": {"cost": 200, "cooldown": 7, "category": "normal"},
     "corn_homing": {"cost": 375, "cooldown": 7, "category": "normal"},
     "corn_gatling": {"cost": 275, "cooldown": 7, "category": "normal"},
     "jelly": {"cost": 125, "cooldown": 7, "category": "normal"},
     "binary_tree": {"cost": 175, "cooldown": 7, "category": "normal"},
     "maguey": {"cost": 300, "cooldown": 15, "category": "normal"},
-    "christmas_nut": {"cost": 50, "cooldown": 30, "category": "normal"},
+    "christmas_nut": {"cost": 50, "cooldown": 50, "category": "normal"},
     "sword_gourd": {"cost": 250, "cooldown": 30, "category": "normal"},
     "coffee_bean": {"cost": 75, "cooldown": 7, "category": "floating"},
+    "bowling_nut": {"cost": 50, "cooldown": 7, "category": "floating"},
 }
 
 # 辅助函数：获取植物类别
@@ -93,6 +94,7 @@ ZOMBIE_CONFIGS = {
     "football_forward": {"cost": 600, "cooldown": 1},
     "gargantuar": {"cost": 900, "cooldown": 1},
     "priest": {"cost": 200, "cooldown": 1},
+    "siren": {"cost": 500, "cooldown": 1},
 }
 
 # ===== 游戏平衡性 =====

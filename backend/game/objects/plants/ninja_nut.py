@@ -10,6 +10,8 @@ class NinjaNut(Plant):
         self.has_spawned_extras = False
 
     def update(self, dt, game_state):
+        super().update(dt, game_state)
+
         if not self.has_spawned_extras:
             self.has_spawned_extras = True
             offsets = [
@@ -27,7 +29,7 @@ class NinjaNut(Plant):
                     if not any(p.col == target_col and p.row == target_row for p in game_state.plants):
                         # Create new NinjaNut
                         new_plant = NinjaNut(target_col, target_row)
-                        new_plant.hp = 1000
+                        new_plant.hp = 400
                         new_plant.has_spawned_extras = True
                         game_state.plants.append(new_plant)
                         spawned_count += 1

@@ -14,6 +14,12 @@ class Trumpet(Plant):
         self.trumpet_active_time = 0
 
     def update(self, dt, game_state):
+        if getattr(self, 'coffee_boosted', False):
+            self.sleep_timer = 0
+        if self.sleep_timer > 0:
+            self.sleep_timer -= dt
+            return
+
         if not self.trumpet_active:
             self.trumpet_cooldown -= dt
             if self.trumpet_cooldown <= 0:

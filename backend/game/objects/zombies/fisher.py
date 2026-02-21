@@ -83,7 +83,10 @@ class FisherZombie(Zombie):
             for p in game_state.plants:
                 if p.row == self.row and p.active:
                     if self.x < p.x + p.w and self.x + self.w > p.x:
-                        if p.type in ["time_machine", "reshaper", "iced_coconut"]: continue
+                        # Ignore floating plants
+                        from ...config import get_plant_category
+                        if get_plant_category(p.type) == "floating":
+                            continue
                         targets.append(p)
             
             if targets:
@@ -101,8 +104,12 @@ class FisherZombie(Zombie):
                     target = None
                     zombie_col = int(self.x / CELL_W)
                     
+                    from ...config import get_plant_category
                     for p in game_state.plants:
                         if p.row == self.row and p.active and p.col < zombie_col:
+                            # Ignore floating plants for hooking
+                            if get_plant_category(p.type) == "floating":
+                                continue
                             if p.col > best_col:
                                 best_col = p.col
                                 target = p

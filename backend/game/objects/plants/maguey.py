@@ -9,7 +9,7 @@ class Maguey(Plant):
         self.max_hp = 200
         self.shoot_interval = 1.5
         self.cost = 300
-        self.range = 400
+        self.range = 300
         self.max_flight = 600
         self.damage = 32
 

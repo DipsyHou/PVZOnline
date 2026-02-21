@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  pvz-server:
+    build: .
+    container_name: pvz-online
+    ports:
+      - "8000:8000"
+    volumes:
+      # 将宿主机的 database 目录挂载到容器内，保证游戏数据持久化
+      - ./database:/app/database
+      # (可选) 将日志挂载出来方便查看
+      - ./pvz_server.log:/app/pvz_server.log
+    environment:
+      - LOG_LEVEL=info
+    restart: unless-stopped

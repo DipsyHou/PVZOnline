@@ -8,7 +8,7 @@ class WaveManager:
         self.em = entity_manager
         self.wave = 0
         # Next-wave countdown (seconds). New waves start on a fixed cadence.
-        self.wave_timer = 20  # Start first wave after 20 seconds
+        self.wave_timer = 30  # Start first wave after 30 seconds
         self.wave_interval = 30  # Fixed seconds between waves
 
         # Allow multiple waves to be active at the same time.
@@ -18,12 +18,15 @@ class WaveManager:
         # Difficulty table by wave threshold.
         self.difficulty_map = {
             1: {"normal": 1.0},
-            5: {"normal": 0.85, "buckethead": 0.15},
-            8: {"normal": 0.70, "buckethead": 0.20, "exploder": 0.10},
-            10: {"normal": 0.55, "buckethead": 0.18, "exploder": 0.12, "fisher": 0.08, "priest": 0.07},
-            15: {"normal": 0.40, "buckethead": 0.18, "exploder": 0.12, "fisher": 0.10, "priest": 0.10, "football": 0.10},
-            20: {"normal": 0.30, "buckethead": 0.17, "exploder": 0.12, "fisher": 0.10, "priest": 0.09, "football": 0.12, "football_forward": 0.10},
-            25: {"normal": 0.22, "buckethead": 0.16, "exploder": 0.12, "fisher": 0.10, "priest": 0.10, "football": 0.12, "football_forward": 0.12, "gargantuar": 0.06},
+            3: {"normal": 0.85, "buckethead": 0.15},
+            5: {"normal": 0.70, "buckethead": 0.20, "exploder": 0.10},
+            8: {"normal": 0.55, "buckethead": 0.18, "exploder": 0.12, "fisher": 0.05, "priest": 0.10},
+            10: {"normal": 0.40, "buckethead": 0.18, "exploder": 0.12, "fisher": 0.10, "priest": 0.10, "football": 0.10},
+            13: {"normal": 0.30, "buckethead": 0.17, "exploder": 0.12, "fisher": 0.10, "priest": 0.09, "football": 0.15, "football_forward": 0.07},
+            15: {"normal": 0.22, "buckethead": 0.16, "exploder": 0.12, "fisher": 0.10, "priest": 0.10, "football": 0.12, "football_forward": 0.08, "siren": 0.10},
+            20: {"normal": 0.14, "buckethead": 0.16, "exploder": 0.12, "fisher": 0.10, "priest": 0.10, "football": 0.12, "football_forward": 0.10, "siren": 0.10, "gargantuar": 0.06},
+            25: {"buckethead": 0.20, "exploder": 0.10, "fisher": 0.10, "priest": 0.10, "football": 0.15, "football_forward": 0.15, "siren": 0.10, "gargantuar": 0.10},
+            30: {"buckethead": 0.15, "exploder": 0.10, "fisher": 0.10, "priest": 0.10, "football": 0.18, "football_forward": 0.17, "siren": 0.10, "gargantuar": 0.10},
         }
 
     def _get_available_weights(self):
@@ -95,7 +98,7 @@ class WaveManager:
         self.wave += 1
         
         # Calculate number of zombies based on wave
-        count = -1 + int(self.wave * 2)
+        count = -1 + int(self.wave * ( 2 + self.wave * 0.05 ))
         
         # Determine available types with weights
         weights_map = self._get_available_weights()

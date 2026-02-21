@@ -39,6 +39,8 @@ try {
 let myInventory = { plants: [], zombies: [] };
 let myPlantLevels = {};
 let selectedDeck = { plants: [], zombies: [] };
+let plantSlots = 12;
+let zombieSlots = 10;
 
 // Expose functions to window IMMEDIATELY
 window.startGame = function() {
@@ -171,6 +173,8 @@ async function loadInventory() {
         if(data.status === 'success') {
             myInventory = data.inventory;
             myPlantLevels = data.plant_levels || {};
+            plantSlots = data.plant_slots || 12;
+            zombieSlots = data.zombie_slots || 10;
             // Use saved deck if available
             if (data.deck) {
                 selectedDeck = data.deck;
@@ -196,16 +200,32 @@ async function loadInventory() {
 }
 
 function renderDeckSelection() {
-    renderSelectGrid('deck-plants', PLANT_CONFIGS, myInventory.plants, selectedDeck.plants, 'plants', myPlantLevels);
-    renderSelectGrid('deck-zombies', ZOMBIE_CONFIGS, myInventory.zombies, selectedDeck.zombies, 'zombies');
+    renderSelectGrid('deck-plants', PLANT_CONFIGS, myInventory.plants, selectedDeck.plants, 'plants', myPlantLevels, plantSlots);
+    renderSelectGrid('deck-zombies', ZOMBIE_CONFIGS, myInventory.zombies, selectedDeck.zombies, 'zombies', {}, zombieSlots);
 }
 
-function renderSelectGrid(elementId, configs, ownedList, selectedList, type, levels = {}) {
+function renderSelectGrid(elementId, configs, ownedList, selectedList, type, levels = {}, maxSlots = 10) {
     const container = document.getElementById(elementId);
     if(!container) return;
     container.innerHTML = '';
     
-    ownedList.forEach(key => {
+    // 按照 configs 中的定义顺序排序 ownedList
+    const configKeys = Object.keys(configs);
+    const sortedOwnedList = ownedList.slice().sort((a, b) => {
+        const indexA = configKeys.indexOf(a);
+        const indexB = configKeys.indexOf(b);
+        return indexA - indexB;
+    });
+    
+    // 显示当前选择数量/上限
+    const counterDiv = document.createElement('div');
+    counterDiv.style.cssText = 'width:100%; text-align:center; padding:8px; margin-bottom:10px; background:rgba(0,0,0,0.3); border-radius:5px; color:#ecf0f1; font-weight:bold;';
+    const currentCount = selectedList.length;
+    const isOverLimit = currentCount > maxSlots;
+    counterDiv.innerHTML = `已选择: <span style="color:${isOverLimit ? '#e74c3c' : '#2ecc71'}">${currentCount}</span> / ${maxSlots}`;
+    container.appendChild(counterDiv);
+    
+    sortedOwnedList.forEach(key => {
         if(!configs[key]) return;
         const item = configs[key];
         const isSelected = selectedList.includes(key);
@@ -234,17 +254,23 @@ function renderSelectGrid(elementId, configs, ownedList, selectedList, type, lev
             ${type === 'plants' ? `<div style="position:absolute; top:2px; right:2px; background:rgba(0,0,0,0.5); color:gold; padding:1px 3px; border-radius:3px; font-size:8px;">Lv.${level}</div>` : ''}
         `;
         
-        div.onclick = () => toggleSelection(type, key);
+        div.onclick = () => toggleSelection(type, key, maxSlots);
         container.appendChild(div);
     });
 }
 
-function toggleSelection(type, key) {
+function toggleSelection(type, key, maxSlots = 10) {
     const list = selectedDeck[type];
     const idx = list.indexOf(key);
     if(idx >= 0) {
+        // 取消选择
         list.splice(idx, 1);
     } else {
+        // 添加选择，检查是否超过上限
+        if(list.length >= maxSlots) {
+            alert(`最多只能选择 ${maxSlots} 张卡牌！`);
+            return;
+        }
         list.push(key);
     }
     renderDeckSelection();

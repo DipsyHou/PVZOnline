@@ -50,8 +50,16 @@ class PlantManager:
             # Determine effective type for placement rules
             effective_type = plant_type
             if plant_type == "mimic":
-                if not self.em.last_planted_type: return
-                effective_type = self.em.last_planted_type
+                # 模仿者只模仿自己上一次放置的植物
+                last_type = None
+                if username and username in self.em.player_states:
+                    last_type = self.em.player_states[username].get('last_planted_type')
+                else:
+                    last_type = self.em.last_planted_type
+                
+                if not last_type: 
+                    return
+                effective_type = last_type
 
             # Check placement validity using category system
             existing_plants = [p for p in self.em.plants if p.col == c and p.row == r]
@@ -91,9 +99,17 @@ class PlantManager:
                 new_plant.owner = username  # Set owner
                 
                 if plant_type == "mimic":
-                    new_plant.mimic_target = self.em.last_planted_type
+                    # 模仿者使用玩家的last_planted_type
+                    if username and username in self.em.player_states:
+                        new_plant.mimic_target = self.em.player_states[username].get('last_planted_type')
+                    else:
+                        new_plant.mimic_target = self.em.last_planted_type
                 else:
-                    self.em.last_planted_type = plant_type
+                    # 更新玩家的last_planted_type
+                    if username and username in self.em.player_states:
+                        self.em.player_states[username]['last_planted_type'] = plant_type
+                    else:
+                        self.em.last_planted_type = plant_type
                     
                 self.em.plants.append(new_plant)
                 
@@ -150,12 +166,14 @@ class PlantManager:
                     p.activate(self.em)
                 break
 
-    def handle_mouse_position(self, data: Dict) -> None:
+    def handle_mouse_position(self, data: Dict, username: Optional[str] = None) -> None:
         """
         更新所有需要鼠标位置的植物（用于养剑葫等）
+        只更新属于该玩家的植物
         
         Args:
             data: 包含mouse_x, mouse_y的字典
+            username: 玩家用户名
         """
         mouse_x = data.get('mouse_x')
         mouse_y = data.get('mouse_y')
@@ -163,10 +181,13 @@ class PlantManager:
         if mouse_x is None or mouse_y is None:
             return
         
-        # 更新所有支持鼠标位置的植物
+        # 只更新属于该玩家的、支持鼠标位置的植物
         for p in self.em.plants:
             if hasattr(p, 'set_mouse_position'):
-                p.set_mouse_position(mouse_x, mouse_y)
+                # 检查植物所有者
+                plant_owner = getattr(p, 'owner', None)
+                if plant_owner == username or (plant_owner is None and username is None):
+                    p.set_mouse_position(mouse_x, mouse_y)
 
     def update(self, dt):
         for p in self.em.plants:
@@ -196,6 +217,9 @@ class PlantManager:
         new_plant = PlantFactory.create_plant(new_type, old_plant.col, old_plant.row)
         if not new_plant:
             return
+        
+        # 继承原植物的所有者
+        new_plant.owner = getattr(old_plant, 'owner', None)
         
         if old_plant in self.em.plants:
             idx = self.em.plants.index(old_plant)

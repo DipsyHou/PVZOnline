@@ -61,6 +61,9 @@ export class Renderer {
                 particleSystem.spawn(e.x, e.y, '#dddddd', 10, {style: 'smoke'});
             } else if(e.kind === 'acid_corrosion'){
                 particleSystem.spawn(e.x, e.y, '#ffffff', 5, {style: 'smoke'});
+            } else if(e.kind === 'bowling_hit'){
+                particleSystem.spawn(e.x, e.y, '#8B4513', 12, {style: 'spark'});
+                particleSystem.spawn(e.x, e.y, '#D2691E', 8, {style: 'splash'});
             }
         });
     }
@@ -133,36 +136,74 @@ export class Renderer {
         }
 
         const img = this.assetManager.getImage(p.type);
-        if (img && img.complete) {
-            ctx.drawImage(img, p.x, p.y, Config.PLANT_W, Config.PLANT_H);
+        
+        // 保龄球旋转效果
+        if (p.type === 'bowling_nut') {
+            // 计算旋转角度（基于位置，模拟滚动）
+            const centerX = p.x + Config.PLANT_W / 2;
+            const centerY = p.y + Config.PLANT_H / 2;
+            const rotation = (p.x / 50) % (Math.PI * 2); // 每50像素旋转一圈
+            
+            ctx.translate(centerX, centerY);
+            ctx.rotate(rotation);
+            
+            if (img && img.complete) {
+                ctx.drawImage(img, -Config.PLANT_W / 2, -Config.PLANT_H / 2, Config.PLANT_W, Config.PLANT_H);
+            } else {
+                ctx.fillStyle = '#8B4513';
+                ctx.fillRect(-Config.PLANT_W / 2, -Config.PLANT_H / 2, Config.PLANT_W, Config.PLANT_H);
+            }
         } else {
-            ctx.fillStyle = '#00ff00';
-            ctx.fillRect(p.x, p.y, Config.PLANT_W, Config.PLANT_H);
+            // 普通植物不旋转
+            if (img && img.complete) {
+                ctx.drawImage(img, p.x, p.y, Config.PLANT_W, Config.PLANT_H);
+            } else {
+                ctx.fillStyle = '#00ff00';
+                ctx.fillRect(p.x, p.y, Config.PLANT_W, Config.PLANT_H);
+            }
         }
+        
+        // 睡眠图标（Z字符）
+        if (p.sleep_timer && p.sleep_timer > 0) {
+            ctx.font = 'bold 24px Arial';
+            ctx.fillStyle = 'rgba(255,255,255,0.9)';
+            ctx.strokeStyle = 'rgba(0,0,0,0.8)';
+            ctx.lineWidth = 2;
+            const zX = p.x + Config.PLANT_W / 2;
+            const zY = p.y + 30;
+            ctx.strokeText('Z', zX, zY);
+            ctx.fillText('Z', zX, zY);
+        }
+        
         ctx.restore();
 
-        // HP Bar
-        const hpRatio = p.hp / p.max_hp;
-        const barH = 6;
-        let barY = p.y; // Default top
+        // HP Bar - 悬浮植物不显示血条
+        const plantConfig = Config.PLANT_CONFIGS[p.type];
+        const isFloating = plantConfig && plantConfig.category === 'floating';
         
-        if (p.type === 'spiky_pumpkin') {
-            // Draw at bottom for Pumpkin
-            barY = p.y + Config.PLANT_H - barH - 2;
+        if (!isFloating) {
+            const hpRatio = p.hp / p.max_hp;
+            const barH = 6;
+            let barY = p.y; // Default top
+            
+            if (p.type === 'spiky_pumpkin') {
+                // Draw at bottom for Pumpkin
+                barY = p.y + Config.PLANT_H - barH - 2;
+            }
+            
+            // Background
+            ctx.fillStyle = 'rgba(0,0,0,0.6)';
+            ctx.fillRect(p.x, barY, Config.PLANT_W, barH);
+            
+            // HP
+            ctx.fillStyle = '#ff4444';
+            ctx.fillRect(p.x, barY, Config.PLANT_W * hpRatio, barH);
+            
+            // Border
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(p.x, barY, Config.PLANT_W, barH);
         }
-        
-        // Background
-        ctx.fillStyle = 'rgba(0,0,0,0.6)';
-        ctx.fillRect(p.x, barY, Config.PLANT_W, barH);
-        
-        // HP
-        ctx.fillStyle = '#ff4444';
-        ctx.fillRect(p.x, barY, Config.PLANT_W * hpRatio, barH);
-        
-        // Border
-        ctx.strokeStyle = 'black';
-        ctx.lineWidth = 1;
-        ctx.strokeRect(p.x, barY, Config.PLANT_W, barH);
         
         // Overlay
         this.drawPlantOverlay(ctx, p, gameState);
@@ -258,6 +299,40 @@ export class Renderer {
                 ctx.stroke();
                 ctx.restore();
             }
+        }
+        
+        // Siren Casting Animation
+        if(z.type === 'siren' && z.skill_casting){
+            const progress = (z.skill_cast_timer || 0) / 2.0; // 0 to 1 over 2 seconds
+            
+            // Pulsing circle effect
+            ctx.save();
+            const centerX = z.x + Config.ZOMBIE_W / 2;
+            const centerY = z.y + Config.ZOMBIE_H / 2;
+            
+            // Multiple expanding circles
+            for (let i = 0; i < 3; i++) {
+                const offset = (progress * 3 + i * 0.3) % 1;
+                const radius = offset * 80;
+                const alpha = (1 - offset) * 0.5;
+                
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(100, 200, 255, ${alpha})`;
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
+            
+            // 海螺图标
+            ctx.font = 'bold 20px Arial';
+            ctx.fillStyle = 'rgba(100, 200, 255, 0.9)';
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+            ctx.lineWidth = 2;
+            const iconX = z.x + Config.ZOMBIE_W / 2 - 8;
+            const iconY = z.y - 10;
+            ctx.strokeText('🐚', iconX, iconY);
+            ctx.fillText('🐚', iconX, iconY);
+            ctx.restore();
         }
 
         // HP Bar & Armor Bar

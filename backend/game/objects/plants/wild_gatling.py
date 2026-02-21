@@ -14,26 +14,7 @@ class WildGatling(Plant):
         self.is_bursting = False
 
     def update(self, dt, game_state):
-        self.shoot_timer += dt
-        
-        if self.shoot_timer >= self.shoot_interval:
-            # Start burst sequence
-            # Check target first
-            has_target = False
-            for z in game_state.zombies:
-                if z.row == self.row and z.x > self.x:
-                    has_target = True
-                    break
-            
-            if has_target:
-                self.shoot_timer = 0
-                self.is_bursting = True
-                self.burst_index = 0
-                self.burst_timer = 0
-            else:
-                # Keep timer at max so it fires immediately when target appears
-                self.shoot_timer = self.shoot_interval
-
+        # 处理连发逻辑
         if self.is_bursting:
             self.burst_timer += dt
             # Bursts at 0.15, 0.30, 0.45, 0.60
@@ -45,6 +26,23 @@ class WildGatling(Plant):
             
             if self.burst_index >= 4:
                 self.is_bursting = False
+        
+        # 调用基类 update（处理 shoot_timer 和 shoot 调用）
+        super().update(dt, game_state)
+
+    def shoot(self, game_state):
+        # 检查是否有目标
+        has_target = False
+        for z in game_state.zombies:
+            if z.row == self.row and z.x > self.x:
+                has_target = True
+                break
+        
+        if has_target:
+            # 开始连发
+            self.is_bursting = True
+            self.burst_index = 0
+            self.burst_timer = 0
 
     def fire_burst(self, game_state):
         bx = self.x + 40
@@ -58,6 +56,3 @@ class WildGatling(Plant):
             vy = math.sin(rad) * speed
             b = Bullet(bx, by, self.row, vx, vy, 20, "pea")
             game_state.bullets.append(b)
-
-    def shoot(self, game_state):
-        pass

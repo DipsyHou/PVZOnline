@@ -27,7 +27,13 @@ class Reshaper(Plant):
                 # We need to know the cost of the target. 
                 # Since we don't have a global config easily accessible here, 
                 # we rely on the plant instance having a 'cost' attribute.
-                refund_amount = getattr(target, 'cost', 0)
+                base_refund = getattr(target, 'cost', 0)
+                
+                # 计算植物玩家数量
+                plant_player_count = sum(1 for role in game_state.roles.values() if role == 'plant')
+                
+                # 双人植物玩家时返还减半
+                refund_amount = base_refund // 2 if plant_player_count >= 2 else base_refund
                 
                 if game_state.player_states:
                     for username in game_state.player_states:

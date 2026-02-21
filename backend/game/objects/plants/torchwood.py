@@ -7,7 +7,3 @@ class Torchwood(Plant):
         self.max_hp = 500
         self.shoot_interval = 0 # Does not shoot
         self.cost = 175
-
-    def update(self, dt, game_state):
-        # Torchwood logic is passive (handled by bullets)
-        pass

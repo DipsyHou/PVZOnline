@@ -68,6 +68,12 @@ def init_db():
         if 'plant_levels' not in columns:
             c.execute("ALTER TABLE users ADD COLUMN plant_levels TEXT DEFAULT '{}'")
             logger.info("Added 'plant_levels' column to users table")
+        if 'plant_slots' not in columns:
+            c.execute("ALTER TABLE users ADD COLUMN plant_slots INTEGER DEFAULT 12")
+            logger.info("Added 'plant_slots' column to users table")
+        if 'zombie_slots' not in columns:
+            c.execute("ALTER TABLE users ADD COLUMN zombie_slots INTEGER DEFAULT 10")
+            logger.info("Added 'zombie_slots' column to users table")
             
         conn.commit()
         conn.close()
@@ -116,8 +122,8 @@ def register(user: UserAuth):
         
         # Initial plant levels (all 0)
         plant_levels = {p: 0 for p in DEFAULT_PLANTS}
-        c.execute("INSERT INTO users (username, password, inventory, deck, plant_levels) VALUES (?, ?, ?, ?, ?)", 
-              (user.username, pwd_hash, json.dumps(inventory), json.dumps(deck), json.dumps(plant_levels)))
+        c.execute("INSERT INTO users (username, password, inventory, deck, plant_levels, plant_slots, zombie_slots) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+              (user.username, pwd_hash, json.dumps(inventory), json.dumps(deck), json.dumps(plant_levels), 12, 10))
         conn.commit()
         
         logger.info(f"User registered successfully: {user.username}")
@@ -137,7 +143,7 @@ def get_inventory(username: str):
     try:
         conn = sqlite3.connect(DB_PATH)
         c = conn.cursor()
-        c.execute("SELECT inventory, deck, plant_levels FROM users WHERE username=?", (username,))
+        c.execute("SELECT inventory, deck, plant_levels, plant_slots, zombie_slots FROM users WHERE username=?", (username,))
         result = c.fetchone()
         conn.close()
         
@@ -146,7 +152,9 @@ def get_inventory(username: str):
                 "status": "success", 
                 "inventory": json.loads(result[0]), 
                 "deck": json.loads(result[1]),
-                "plant_levels": json.loads(result[2]) if len(result) > 2 else {}
+                "plant_levels": json.loads(result[2]) if len(result) > 2 else {},
+                "plant_slots": result[3] if len(result) > 3 else 12,
+                "zombie_slots": result[4] if len(result) > 4 else 10
             }
         else:
             logger.warning(f"Inventory request for non-existent user: {username}")

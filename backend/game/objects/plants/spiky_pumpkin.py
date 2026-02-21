@@ -7,6 +7,3 @@ class SpikyPumpkin(Plant):
         self.max_hp = 2000
         self.shoot_interval = 0
         self.cost = 150
-
-    def update(self, dt, game_state):
-        pass

@@ -24,13 +24,6 @@ class SwordGourd(Plant):
         self.target_x = None
         self.target_y = None
 
-    def update(self, dt, game_state):
-        """更新射击计时器"""
-        self.shoot_timer += dt
-        if self.shoot_timer >= self.shoot_interval:
-            self.shoot_timer = 0
-            self.shoot(game_state)
-
     def shoot(self, game_state):
         """发射飞剑"""
         # 如果没有鼠标位置，默认向右发射

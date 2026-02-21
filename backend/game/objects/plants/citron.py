@@ -12,12 +12,21 @@ class Citron(Plant):
         self.max_charge = 20.0
 
     def update(self, dt, game_state):
+        # 睡眠中不能积累充能
+        if getattr(self, 'coffee_boosted', False):
+            self.sleep_timer = 0
+        if self.sleep_timer > 0:
+            self.sleep_timer -= dt
+            return
+
         self.charge_time += dt
         if self.charge_time > self.max_charge:
             self.charge_time = self.max_charge
 
     def activate(self, game_state):
         if self.charge_time < 1.0:
+            return
+        if self.sleep_timer > 0:
             return
 
         effective_charge = min(self.charge_time, 20.0)

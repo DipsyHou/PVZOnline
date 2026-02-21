@@ -12,6 +12,7 @@ class ElectrodeCherry(Plant):
         self.paired_id = None
 
     def update(self, dt, game_state):
+        super().update(dt, game_state)
         # Find partner if not paired
         if not self.paired_id:
             best_dist = float('inf')

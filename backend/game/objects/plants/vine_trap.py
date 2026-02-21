@@ -11,6 +11,12 @@ class VineTrap(Plant):
         self.life_timer = 0
 
     def update(self, dt, game_state):
+        if getattr(self, 'coffee_boosted', False):
+            self.sleep_timer = 0
+        if self.sleep_timer > 0:
+            self.sleep_timer -= dt
+            return
+
         self.life_timer += dt
         if self.life_timer >= 15.0:
             self.active = False

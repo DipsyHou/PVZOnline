@@ -19,16 +19,19 @@ class CoffeeBean(Plant):
         self.duration = 15.0  # 持续时间
         self.life_timer = 0
         self.boosted_plant = None  # 被加速的植物
-        self.has_applied_boost = False
     
     def update(self, dt, game_state):
         """更新生命计时"""
         self.life_timer += dt
         
-        # 应用加速效果（只在第一次）
-        if not self.has_applied_boost:
+        # 检查被加速的植物是否还存活
+        if self.boosted_plant and not self.boosted_plant.active:
+            self.remove_boost()
+            self.boosted_plant = None
+        
+        # 如果还没有找到被加速的植物，持续尝试
+        if not self.boosted_plant:
             self.apply_boost(game_state)
-            self.has_applied_boost = True
         
         # 时间到后消失
         if self.life_timer >= self.duration:

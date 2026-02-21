@@ -72,8 +72,9 @@ class Zombie(GameObject):
             if p.row == self.row and p.active:
                 # Simple collision for eating
                 if self.x < p.x + p.w and self.x + self.w > p.x:
-                    # Ignore floating plants for eating?
-                    if p.type in ["time_machine", "reshaper", "iced_coconut"]:
+                    # Ignore floating plants for eating
+                    from ...config import get_plant_category
+                    if get_plant_category(p.type) == "floating":
                         continue
                     targets.append(p)
         

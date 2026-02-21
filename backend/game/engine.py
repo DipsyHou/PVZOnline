@@ -35,7 +35,7 @@ class Game:
             elif data['type'] == 'shovel':
                 self.plant_manager.handle_shovel(data)
             elif data['type'] == 'mouse_position':
-                self.plant_manager.handle_mouse_position(data)
+                self.plant_manager.handle_mouse_position(data, username)
         elif role == "zombie":
             if data['type'] == 'spawn_zombie':
                 self.zombie_manager.handle_spawn_zombie(data)
@@ -83,6 +83,7 @@ class Game:
             if hasattr(p, 'charge_time'): data['charge_time'] = p.charge_time
             if hasattr(p, 'laser_active_time'): data['laser_active_time'] = p.laser_active_time
             if hasattr(p, 'paired_id'): data['paired_id'] = p.paired_id
+            if hasattr(p, 'sleep_timer'): data['sleep_timer'] = p.sleep_timer
             plant_data.append(data)
 
         zombie_data = []
@@ -98,6 +99,8 @@ class Game:
             if hasattr(z, 'hook_target_id'): z_data['hook_target_id'] = z.hook_target_id
             if hasattr(z, 'hook_charge_time'): z_data['hook_charge_time'] = z.hook_charge_time
             if hasattr(z, 'heal_target_id'): z_data['heal_target_id'] = z.heal_target_id
+            if hasattr(z, 'skill_casting'): z_data['skill_casting'] = z.skill_casting
+            if hasattr(z, 'skill_cast_timer'): z_data['skill_cast_timer'] = z.skill_cast_timer
             zombie_data.append(z_data)
 
         bullet_data = []
