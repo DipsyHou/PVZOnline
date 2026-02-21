@@ -3,11 +3,11 @@ name: Docker
 # 当推送到 main 分支或者打标签时触发构建
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "dev" ]
 
 env:
   # 使用 GitHub Container Registry
