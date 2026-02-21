@@ -13,6 +13,14 @@ import asyncio
 import time
 import math
 import logging
+import sys
+import os
+
+# 将当前目录添加到 Python 搜索路径，以便在 Docker 容器中直接引用 sibling 模块
+# 当使用 uvicorn backend.server:app 从根目录启动时，backend 文件夹不在 sys.path 中
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
 
 # 配置日志系统
 logging.basicConfig(
